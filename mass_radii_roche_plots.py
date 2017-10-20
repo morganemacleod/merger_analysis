@@ -123,3 +123,32 @@ plt.grid()
 
 plt.subplots_adjust(wspace=0.0)
 plt.savefig("paper_figures/mass_radii_time_sep.pdf",bbox_inches='tight')
+
+
+
+
+###
+# Unbound mass
+###
+
+mb = ascii.read("mass_bound_time.dat")
+mb['sep'] = np.interp(mb['time'],orb['time'],orb['sep'])
+
+
+tmin=-30
+select = mb['time']-t1>tmin
+
+plt.figure(figsize=(8,5))
+plt.subplot(121)
+plt.plot(mb[select]['time']-t1,mb[select]['mass_unbound'],'kx-')
+plt.xlabel("$t-t_1 \ \ [( R_1^3 / GM_1 )^{1/2}]$")
+plt.ylabel("Unbound Mass $[M_1]$")
+
+plt.subplot(122)
+plt.plot(mb[select]['sep'],mb[select]['mass_unbound'],'kx-')
+plt.xlabel("Separation $[R_1]$")
+plt.yticks(visible=False)
+
+plt.subplots_adjust(wspace=0.0)
+plt.savefig("paper_figures/mass_bound_time_sep.pdf",bbox_inches='tight')
+
