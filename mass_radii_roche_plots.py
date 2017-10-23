@@ -27,7 +27,7 @@ plt.rcParams['font.size'] = 16
 m1 = 0.631686
 m2 = 0.3
 
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr/"
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 
@@ -151,4 +151,76 @@ plt.yticks(visible=False)
 
 plt.subplots_adjust(wspace=0.0)
 plt.savefig("paper_figures/mass_bound_time_sep.pdf",bbox_inches='tight')
+
+
+
+###
+# Torque spatial decomposition
+###
+
+mt = ascii.read("roche_mass_torque_time.dat")
+mt['sep'] = np.interp(mt['time'],orb['time'],orb['sep'])
+
+# TOTAL GRAV TORQUE ON THE TWO COMPONENTS
+orb['t2'] = np.cross(orb['r']-orb['rcom'],m2*orb['agas2'])[:,2]
+orb['t1'] = np.cross(-orb['rcom'],m1*orb['agas1'])[:,2]
+
+tmin=-1e10
+selectorb = orb['time']-t1>tmin
+select = mt['time']-t1>tmin
+
+ymin=-0.04
+ymax = 0.008
+
+
+plt.figure(figsize=(12,5))
+
+plt.subplot(131)
+plt.plot(orb[selectorb]['sep'],orb[selectorb]['t1'],'C0-',lw=3,
+         label=r'$\tau_{\rm grav,1}$')
+plt.plot(mt[select]['sep'],mt[select]['t1_RL1'],'C0:',lw=2,
+        label=r'$\tau_{\rm grav,1}({\rm RL}_1)$')
+plt.plot(mt[select]['sep'],mt[select]['t1_RL2'],'C0--',lw=2,
+        label=r'$\tau_{\rm grav,1}({\rm RL}_2)$')
+plt.legend(loc=0,fontsize=18,frameon=True)
+plt.grid()
+plt.ylim(ymin,ymax)
+plt.xlabel("Separation $[R_1]$")
+plt.ylabel(r'$\tau_{\rm grav}$',fontsize=24)
+plt.title("$m_1$")
+
+
+plt.subplot(132)
+plt.plot(orb[selectorb]['sep'],orb[selectorb]['t2'],'C1-',lw=3,
+        label=r'$\tau_{\rm grav,2}$')
+plt.plot(mt[select]['sep'],mt[select]['t2_RL1'],'C1:',lw=2,
+        label=r'$\tau_{\rm grav,2}({\rm RL}_1)$')
+plt.plot(mt[select]['sep'],mt[select]['t2_RL2'],'C1--',lw=2,
+        label=r'$\tau_{\rm grav,2}({\rm RL}_2)$')
+plt.legend(loc=0,fontsize=18,frameon=True)
+plt.grid()
+plt.xlabel("Separation $[R_1]$")
+plt.yticks(visible=False)
+plt.ylim(ymin,ymax)
+plt.title("$m_2$")
+
+
+
+plt.subplot(133)
+plt.plot(orb[selectorb]['sep'],orb[selectorb]['t1']+orb[selectorb]['t2'],'k-',lw=3,
+         label=r'$\tau_{\rm grav}$')
+plt.plot(mt[select]['sep'],mt[select]['t1_RL1']+mt[select]['t2_RL1'],'k:',
+         label=r'$\tau_{\rm grav}({\rm RL}_1)$',lw=2)
+plt.plot(mt[select]['sep'],mt[select]['t1_RL2']+mt[select]['t2_RL2'],'k--',
+         label=r'$\tau_{\rm grav}({\rm RL}_2)$',lw=2)
+plt.legend(loc=0,fontsize=18,frameon=True)
+plt.ylim(ymin,ymax)
+plt.grid()
+plt.yticks(visible=False)
+plt.xlabel("Separation $[R_1]$")
+plt.title("total")
+
+plt.subplots_adjust(hspace=0,wspace=0)
+plt.savefig("paper_figures/torque_roche_sep.pdf",bbox_inches='tight')
+
 

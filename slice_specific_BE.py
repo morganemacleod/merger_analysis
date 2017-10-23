@@ -23,12 +23,12 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr/" #"/home/morganmacleod/DATA/athenaruns/pm_envelope/convergence_studies/smr_dr_RL_0.2/"
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 m1 = 0.631686
 m2 = 0.3
 G=1
 
-myfile = base_dir+"HSE.out1.00085.athdf"
+myfile = base_dir+"HSE.out1.00253.athdf"
 
 mycm = plt.cm.RdBu_r
 
@@ -85,7 +85,7 @@ plt.contour(ou.get_plot_array_midplane(xrot),
                ou.get_plot_array_midplane(yrot),
                ou.get_plot_array_midplane(d['etot'][:,len(d['x2v'])/2,:] /
                                           d['rho'][:,len(d['x2v'])/2,:]) ,
-               levels=[0],colors='k')
+               levels=[0],colors='k',linewidths=0.5)
     
 plt.plot((x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot),
          (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),

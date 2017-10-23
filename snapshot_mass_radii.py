@@ -9,9 +9,9 @@ import OrbitAnalysisUtils as ou
 m1 = 0.631686
 m2 = 0.3
 
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr/"
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 
-filelist = glob(base_dir+"HSE.out1.000[3-9][0-9].athdf")
+filelist = glob(base_dir+"HSE.out1.00[2][0-9][0-9].athdf")
 #filelist = glob(base_dir+"HSE.out1.00039.athdf")
 print filelist
 

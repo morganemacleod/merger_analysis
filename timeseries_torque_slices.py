@@ -24,22 +24,21 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr/" #"/home/morganmacleod/DATA/athenaruns/pm_envelope/convergence_studies/smr_dr_RL_0.2/"
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 m1 = 0.631686
 m2 = 0.3
 G=1
 
 
-#file_list = glob(base_dir+"HSE.out1.0023[0-8].athdf")
-file_list = [base_dir+"HSE.out1.00030.athdf",
-             base_dir+"HSE.out1.00043.athdf",
-             base_dir+"HSE.out1.00053.athdf",
-            base_dir+"HSE.out1.00067.athdf", 
-            base_dir+"HSE.out1.00077.athdf",
-            base_dir+"HSE.out1.00081.athdf",
-            base_dir+"HSE.out1.00083.athdf",
-            base_dir+"HSE.out1.00084.athdf",
-            base_dir+"HSE.out1.00085.athdf"]
+file_list = [base_dir+"HSE.out1.00050.athdf",
+             base_dir+"HSE.out1.00150.athdf",
+             base_dir+"HSE.out1.00225.athdf",
+            base_dir+"HSE.out1.00235.athdf",
+            base_dir+"HSE.out1.00245.athdf",
+            base_dir+"HSE.out1.00249.athdf",
+            base_dir+"HSE.out1.00251.athdf",
+            base_dir+"HSE.out1.00252.athdf",
+            base_dir+"HSE.out1.00253.athdf"]
 
 mycm = plt.cm.PiYG
 
