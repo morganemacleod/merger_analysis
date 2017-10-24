@@ -23,22 +23,26 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/" 
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr-diode/" 
+
+output_dir = "diode_figures/"
+
 m1 = 0.631686
 m2 = 0.3
 G=1
 
+full_file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
 
-#file_list = glob(base_dir+"HSE.out1.0023[0-8].athdf")
-file_list = [base_dir+"HSE.out1.00050.athdf",
-             base_dir+"HSE.out1.00150.athdf",
-             base_dir+"HSE.out1.00225.athdf",
-            base_dir+"HSE.out1.00235.athdf", 
-            base_dir+"HSE.out1.00245.athdf",
-            base_dir+"HSE.out1.00249.athdf",
-            base_dir+"HSE.out1.00251.athdf",
-            base_dir+"HSE.out1.00252.athdf",
-            base_dir+"HSE.out1.00253.athdf"]
+file_list = [full_file_list[-120],
+             full_file_list[-60],
+             full_file_list[-35],
+             full_file_list[-19],
+             full_file_list[-9],
+             full_file_list[-5],
+             full_file_list[-3],
+             full_file_list[-2],
+             full_file_list[-1]]
+
 
 mycm = plt.cm.bone_r
 
@@ -118,7 +122,7 @@ for i,myfile in enumerate(file_list):
     cb = grid.cbar_axes[i].colorbar(im)
     cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
     
-plt.savefig("paper_figures/density_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
+plt.savefig(output_dir+"density_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
 plt.clf()
 
 
@@ -187,5 +191,5 @@ for i,myfile in enumerate(file_list):
     cb = grid.cbar_axes[i].colorbar(im)
     cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
     
-plt.savefig("paper_figures/density_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
+plt.savefig(output_dir+"density_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
 

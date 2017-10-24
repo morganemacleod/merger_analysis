@@ -29,6 +29,8 @@ m2 = 0.3
 
 base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 
+output_dir = "paper_figures/"
+
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 
 t1=ou.get_t1(orb)
@@ -71,7 +73,7 @@ plt.ylim(1.e-3,1)
 plt.xlabel("Separation $[R_1]$")
 
 plt.subplots_adjust(wspace=0.0)
-plt.savefig("paper_figures/mass_roche_time_sep.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"mass_roche_time_sep.pdf",bbox_inches='tight')
 
 
 
@@ -122,7 +124,7 @@ plt.grid()
 
 
 plt.subplots_adjust(wspace=0.0)
-plt.savefig("paper_figures/mass_radii_time_sep.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"mass_radii_time_sep.pdf",bbox_inches='tight')
 
 
 
@@ -221,6 +223,6 @@ plt.xlabel("Separation $[R_1]$")
 plt.title("total")
 
 plt.subplots_adjust(hspace=0,wspace=0)
-plt.savefig("paper_figures/torque_roche_sep.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"torque_roche_sep.pdf",bbox_inches='tight')
 
 

@@ -24,6 +24,9 @@ plt.rcParams['font.size'] = 16
 
 ###### SIMULATION PARAMS   #########
 base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+
+output_dir = "paper_figures/"
+
 m1 = 0.631686
 m2 = 0.3
 G=1
@@ -102,4 +105,4 @@ plt.ylim(-10,10)
 plt.xticks([-10,-5,0,5,10])
 plt.yticks([-10,-5,0,5,10])
 
-plt.savefig("paper_figures/binding_energy_slice_final.pdf",dpi=300,bbox_inches='tight')
+plt.savefig(output_dir+"binding_energy_slice_final.pdf",dpi=300,bbox_inches='tight')

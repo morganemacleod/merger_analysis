@@ -33,7 +33,9 @@ def p_orb(q,a):
 m1 = 0.631686
 m2 = 0.3
 
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr-diode/"
+
+output_dir = "diode_figures/"
 
 #######################################
 
@@ -41,7 +43,7 @@ orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 print "ORB: ... ", orb.colnames
 
 hst = ascii.read(base_dir+"HSE.hst",
-                 names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv'],)
+                 names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv'])
 print "\nHSE: ...", hst.colnames
 
 mg = hst['mass'][0]
@@ -67,7 +69,7 @@ plt.ylabel(r'$y/R_1$')
 plt.xlim(-2.5,2.5)
 plt.ylim(-2.5,2.5)
 plt.legend(loc=0)
-plt.savefig("paper_figures/orbital_path_sim.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"orbital_path_sim.pdf",bbox_inches='tight')
 plt.clf()
 
 plt.figure(figsize=(5,5))
@@ -81,7 +83,7 @@ plt.axis('equal')
 plt.xlim(-2.5,2.5)
 plt.ylim(-2.5,2.5)
 plt.legend(loc=0)
-plt.savefig("paper_figures/orbital_path_in.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"orbital_path_in.pdf",bbox_inches='tight')
 plt.clf()
 
 plt.figure(figsize=(9,4))
@@ -92,7 +94,7 @@ plt.axhline(a_RL(0.3),ls='-',color='SkyBlue')
 plt.ylabel(r'separation $[R_1]$')
 plt.xlabel(r'$t-t_1 \ [(R_1^3/GM_1)^{1/2}]$')
 plt.xlim(orb['time'][0]-t1,10)
-plt.savefig("paper_figures/separation_time.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"separation_time.pdf",bbox_inches='tight')
 plt.clf()
 
 
@@ -115,7 +117,7 @@ plt.plot(orb['sep'], orb['ltz']/orb['ltz'][0],label=r'total $L_z$',lw=2,color='k
 plt.legend(loc=0)
 plt.xlabel(r'separation $[R_1]$')
 #plt.ylabel(r'$\hat z$ angular momenta $\left[(GM_1 R_1)^{1/2} \right]$')
-plt.savefig("paper_figures/norm_tot_ang_mom_sep.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"norm_tot_ang_mom_sep.pdf",bbox_inches='tight')
 plt.clf()
 
 
@@ -134,7 +136,7 @@ plt.plot(orb['sep'],(orb['sep']/orb['sep'][0])**-1.5,':',lw=2,color='grey',label
 plt.ylabel(r"$\Omega/\Omega_{\rm orb,0}$")
 plt.xlabel(r'separation $[R_1]$')
 plt.legend(loc=0)
-plt.savefig("paper_figures/omega_separation.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"omega_separation.pdf",bbox_inches='tight')
 plt.clf()
 
 
@@ -157,7 +159,7 @@ plt.xlabel(r'separation $[R_1]$')
 plt.ylabel(r'$N_{\rm decay}$')
 plt.ylim(0.3,1.e2)
 plt.xlim(0.6,2.06)
-plt.savefig("paper_figures/Ndecay_sep.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"Ndecay_sep.pdf",bbox_inches='tight')
 plt.clf()
 
 
@@ -195,4 +197,4 @@ plt.yticks(visible=False)
 plt.grid()
 
 plt.subplots_adjust(wspace=0.0)
-plt.savefig("paper_figures/torque_time_sep.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"torque_time_sep.pdf",bbox_inches='tight')
