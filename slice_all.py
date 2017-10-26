@@ -23,13 +23,13 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr/" #"/home/morganmacleod/DATA/athenaruns/pm_envelope/convergence_studies/smr_dr_RL_0.2/"
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr-q06/" 
 m1 = 0.631686
-m2 = 0.3
+m2 = 0.6
 G=1
 
-file_list = glob(base_dir+"HSE.out1.000[3-9][0-9].athdf")
-
+file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
+output_dir = "snapshots/q06/"
 mycm = plt.cm.bone_r
 
 mylevel=2
@@ -79,7 +79,7 @@ for i,myfile in enumerate(file_list):
     xrot = (d['x'][:,len(d['x2v'])/2,:]-rcom[0])*np.cos(theta_rot) - (d['y'][:,len(d['x2v'])/2,:]-rcom[1])*np.sin(theta_rot)
     yrot = (d['x'][:,len(d['x2v'])/2,:]-rcom[0])*np.sin(theta_rot) + (d['y'][:,len(d['x2v'])/2,:]-rcom[1])*np.cos(theta_rot)
 
-    plt.figure(figsize=(6,5))
+    plt.figure(figsize=(6.2,5))
     im=plt.pcolormesh(
                ou.get_plot_array_midplane(xrot),
                ou.get_plot_array_midplane(yrot),
@@ -97,5 +97,5 @@ for i,myfile in enumerate(file_list):
     plt.xlabel(r"$x'/R_1$")
     plt.ylabel(r"$y'/R_1$")
     plt.colorbar(im,label=r"$\log \ \rho \ \ [M_1/R_1^3]$")
-    plt.savefig("snapshots/density_"+str(i)+".png",bbox_inches='tight',dpi=150)
+    plt.savefig(output_dir+"density_"+str(i)+".png",bbox_inches='tight',dpi=150)
     plt.clf()

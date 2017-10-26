@@ -27,9 +27,9 @@ plt.rcParams['font.size'] = 16
 m1 = 0.631686
 m2 = 0.3
 
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr-diode/"
 
-output_dir = "paper_figures/"
+output_dir = "diode_figures/"
 
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 
@@ -42,7 +42,7 @@ t1=ou.get_t1(orb)
 ###
 # MASS IN ROCHE LOBES
 ###
-mt = ascii.read("roche_mass_torque_time.dat")
+mt = ascii.read(output_dir+"roche_mass_torque_time.dat")
 mt['sep'] = np.interp(mt['time'],orb['time'],orb['sep'])
 mt.colnames
 
@@ -82,7 +82,7 @@ plt.savefig(output_dir+"mass_roche_time_sep.pdf",bbox_inches='tight')
 ###
 # MASS IN RADII
 ###
-mr = ascii.read("mass_radii_time.dat")
+mr = ascii.read(output_dir+"mass_time.dat")
 mr['sep'] = np.interp(mr['time'],orb['time'],orb['sep'])
 
 
@@ -95,7 +95,8 @@ labels=[r"$r<1R_1$",r"$r<2R_1$",r"$r<3R_1$",r"$r<4R_1$",r"$r<6R_1$",r"$r<10R_1$"
 tmin=-30
 select = mr['time']-t1>tmin
 
-cols = mr.colnames[1:-1]
+cols = mr.colnames[3:-1]
+print "plotting columns,",cols
 for i,colname in enumerate(cols):
     plt.plot(mr[select]['time']-t1,mr[select][colname],
             color=mycm(float(i)/(len(cols)-1) ),
@@ -108,10 +109,7 @@ plt.legend(loc=0,frameon=True)
 plt.grid()
 
 plt.subplot(122)
-mycm = plt.cm.viridis
-labels=[r"$r<1R_1$",r"$r<2R_1$",r"$r<3R_1$",r"$r<4R_1$",r"$r<6R_1$",r"$r<10R_1$",r"$r<15R_1$",r"$r<20R_1$",r"$r<30R_1$",]
 
-cols = mr.colnames[1:-1]
 for i,colname in enumerate(cols):
     plt.plot(mr[select]['sep'],mr[select][colname],
             color=mycm(float(i)/(len(cols)-1) ),
@@ -132,27 +130,19 @@ plt.savefig(output_dir+"mass_radii_time_sep.pdf",bbox_inches='tight')
 ###
 # Unbound mass
 ###
-
-mb = ascii.read("mass_bound_time.dat")
-mb['sep'] = np.interp(mb['time'],orb['time'],orb['sep'])
-
-
-tmin=-30
-select = mb['time']-t1>tmin
-
 plt.figure(figsize=(8,5))
 plt.subplot(121)
-plt.plot(mb[select]['time']-t1,mb[select]['mass_unbound'],'kx-')
+plt.plot(mr[select]['time']-t1,mr[select]['mass_unbound'],'kx-')
 plt.xlabel("$t-t_1 \ \ [( R_1^3 / GM_1 )^{1/2}]$")
 plt.ylabel("Unbound Mass $[M_1]$")
 
 plt.subplot(122)
-plt.plot(mb[select]['sep'],mb[select]['mass_unbound'],'kx-')
+plt.plot(mr[select]['sep'],mr[select]['mass_unbound'],'kx-')
 plt.xlabel("Separation $[R_1]$")
 plt.yticks(visible=False)
 
 plt.subplots_adjust(wspace=0.0)
-plt.savefig("paper_figures/mass_bound_time_sep.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"mass_bound_time_sep.pdf",bbox_inches='tight')
 
 
 
@@ -160,7 +150,7 @@ plt.savefig("paper_figures/mass_bound_time_sep.pdf",bbox_inches='tight')
 # Torque spatial decomposition
 ###
 
-mt = ascii.read("roche_mass_torque_time.dat")
+mt = ascii.read(output_dir+"roche_mass_torque_time.dat")
 mt['sep'] = np.interp(mt['time'],orb['time'],orb['sep'])
 
 # TOTAL GRAV TORQUE ON THE TWO COMPONENTS

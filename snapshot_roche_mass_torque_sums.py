@@ -59,4 +59,4 @@ for i,myfile in enumerate(filelist):
     data.append([t,mRL1,mRL2,t1_RL1,t1_RL2,t2_RL1,t2_RL2])
 
 datatable = Table(np.array(data),names=['time','mRL1','mRL2','t1_RL1','t1_RL2','t2_RL1','t2_RL2'] )
-ascii.write(datatable,output="roche_mass_torque_time.dat")
+ascii.write(datatable,output=output_dir+"roche_mass_torque_time.dat")
