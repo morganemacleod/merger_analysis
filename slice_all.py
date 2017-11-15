@@ -227,8 +227,8 @@ for i,myfile in enumerate(file_list):
         plt.ylim(-5,5)
         plt.xlabel(r"$x'/R_1$")
         plt.ylabel(r"$y'/R_1$")
-        plt.colorbar(im,label=r"$\log c_s [(GM_1/R_1)^{1/2}]$")
-        plt.savefig(output_dir+"sound_speed_"+str(i)+".png",bbox_inches='tight',dpi=300)
+        plt.colorbar(im,label=r"entropy $\ln \left(P/\rho^\gamma \right)$")
+        plt.savefig(output_dir+"entropy_"+str(i)+".png",bbox_inches='tight',dpi=300)
         plt.close()
 
         plt.figure(figsize=(6.2,5))
@@ -246,8 +246,8 @@ for i,myfile in enumerate(file_list):
         plt.ylim(y2p_com-1,y2p_com+1)
         plt.xlabel(r"$x'/R_1$")
         plt.ylabel(r"$y'/R_1$")
-        plt.colorbar(im,label=r"$\log c_s [(GM_1/R_1)^{1/2}]$")
-        plt.savefig(output_dir+"sound_speed_zoom_"+str(i)+".png",bbox_inches='tight',dpi=300)
+        plt.colorbar(im,label=r"entropy $\ln \left(P/\rho^\gamma \right)$")
+        plt.savefig(output_dir+"entropy_zoom_"+str(i)+".png",bbox_inches='tight',dpi=300)
         plt.close()
 
     
