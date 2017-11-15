@@ -30,7 +30,7 @@ m2 = 0.3
 G=1
 
 file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
-file_list = file_list[40:42]
+
 output_dir = "snapshots/sma2/"
 mycm = plt.cm.bone_r
 
@@ -38,7 +38,8 @@ mylevel=2
 
 vmin = -8
 
-vars = ['rho','press','cs','etot','torque']
+#vars = ['rho','press','cs','etot','torque','entropy']
+vars = ['entropy']
 
 ####################################
 
@@ -209,6 +210,47 @@ for i,myfile in enumerate(file_list):
         plt.savefig(output_dir+"sound_speed_zoom_"+str(i)+".png",bbox_inches='tight',dpi=300)
         plt.close()
 
+
+    if 'entropy' in vars:
+        plt.figure(figsize=(6.2,5))
+        im=plt.pcolormesh(
+            ou.get_plot_array_midplane(xrot),
+            ou.get_plot_array_midplane(yrot),
+            ou.get_plot_array_midplane(np.log( d['press'][:,len(d['x2v'])/2,:] / d['rho'][:,len(d['x2v'])/2,:]**(5./3.)   ) ),
+            cmap=plt.cm.RdYlBu_r,
+            vmin=-0.25,vmax=5.5,rasterized=True)
+        
+        plt.plot(x2p_com,y2p_com,'w*')
+    
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.xlim(-5,5)
+        plt.ylim(-5,5)
+        plt.xlabel(r"$x'/R_1$")
+        plt.ylabel(r"$y'/R_1$")
+        plt.colorbar(im,label=r"$\log c_s [(GM_1/R_1)^{1/2}]$")
+        plt.savefig(output_dir+"sound_speed_"+str(i)+".png",bbox_inches='tight',dpi=300)
+        plt.close()
+
+        plt.figure(figsize=(6.2,5))
+        im=plt.pcolormesh(
+            ou.get_plot_array_midplane(xrot),
+            ou.get_plot_array_midplane(yrot),
+            ou.get_plot_array_midplane(np.log( d['press'][:,len(d['x2v'])/2,:] / d['rho'][:,len(d['x2v'])/2,:]**(5./3.)   ) ),
+            cmap=plt.cm.RdYlBu_r,
+            vmin=-0.25,vmax=5.5,rasterized=True)
+        
+        plt.plot(x2p_com,y2p_com,'w*')
+    
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.xlim(x2p_com-1,x2p_com+1)
+        plt.ylim(y2p_com-1,y2p_com+1)
+        plt.xlabel(r"$x'/R_1$")
+        plt.ylabel(r"$y'/R_1$")
+        plt.colorbar(im,label=r"$\log c_s [(GM_1/R_1)^{1/2}]$")
+        plt.savefig(output_dir+"sound_speed_zoom_"+str(i)+".png",bbox_inches='tight',dpi=300)
+        plt.close()
+
+    
     if 'etot' in vars:
         plt.figure(figsize=(6.2,5))
         im=plt.pcolormesh(
