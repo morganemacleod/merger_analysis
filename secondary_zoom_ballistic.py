@@ -368,7 +368,7 @@ for i,myfile in enumerate(file_list):
     # CONSTRUCT INITIAL VALUES
     width = 0.05
     npoints = 30
-    x0 = xL[1] + np.random.normal(0,width,npoints) + width
+    x0 = xL[1] + np.random.normal(0,width/3,npoints) + width
     y0 = 0 + np.random.normal(0,width,npoints)
     z0 = np.zeros_like(y0)
 

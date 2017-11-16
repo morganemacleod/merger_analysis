@@ -274,7 +274,7 @@ if 'pressure' in vars:
         grid[i].set_xlabel(r"$x'/R_1$")
         grid[i].set_ylabel(r"$y'/R_1$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
+        cb.set_label_text(r"$\log \ P \ \ [GM_1^2/R_1^4]$")
 
     print "\n\n saving ... ", output_dir+"pressure_timeseries_midplane.pdf\n\n"
     plt.savefig(output_dir+"pressure_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
@@ -346,7 +346,7 @@ if 'pressure' in vars:
         grid[i].set_xlabel(r"$x'/R_1$")
         grid[i].set_ylabel(r"$z/R_1$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
+        cb.set_label_text(r"$\log \ P \ \ [GM_1^2/R_1^4]$")
         
     print "\n\n saving... ",output_dir+"pressure_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"pressure_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
@@ -416,7 +416,7 @@ if 'entropy' in vars:
         grid[i].set_xlabel(r"$x'/R_1$")
         grid[i].set_ylabel(r"$y'/R_1$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
+        cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
     
 
     print "\n\n saving ... ",output_dir+"entropy_timeseries_midplane.pdf \n\n"
@@ -489,7 +489,7 @@ if 'entropy' in vars:
         grid[i].set_xlabel(r"$x'/R_1$")
         grid[i].set_ylabel(r"$z/R_1$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
+        cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
             
     print "\n\n saving ... ",output_dir+"entropy_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"entropy_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
@@ -699,7 +699,7 @@ if 'torque' in vars:
         grid[i].set_xlabel(r"$x'/R_1$")
         grid[i].set_ylabel(r"$y'/R_1$")
 
-        fig.colorbar(im,cax=grid.cbar_axes[i],label='torque density (z) [UNITS]')
+        fig.colorbar(im,cax=grid.cbar_axes[i],label='torque density (z) $[GM_1^2/R_1^4]$')
 
 
     print "\n\n saving ... ",output_dir+"torque_timeseries_midplane.pdf\n\n"
