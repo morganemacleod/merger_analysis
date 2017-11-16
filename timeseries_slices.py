@@ -8,6 +8,7 @@ from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 import OrbitAnalysisUtils as ou
 from mpl_toolkits.axes_grid1 import ImageGrid
+import matplotlib.colors as colors
 
 # set some global options
 plt.rcParams['figure.figsize'] = (6,5)
@@ -23,9 +24,9 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr-diode/" 
+base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/" 
 
-output_dir = "diode_figures/"
+output_dir = "paper_figures/"
 
 m1 = 0.631686
 m2 = 0.3
@@ -33,13 +34,10 @@ G=1
 
 full_file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
 
-file_list = [full_file_list[-120],
-             full_file_list[-60],
+file_list = [full_file_list[-100],
              full_file_list[-35],
-             full_file_list[-19],
-             full_file_list[-9],
+             full_file_list[-15],
              full_file_list[-5],
-             full_file_list[-3],
              full_file_list[-2],
              full_file_list[-1]]
 
@@ -71,8 +69,8 @@ print "t1=",t1
 x2slicevalue=get_midplane_theta(file_list[0],level=mylevel)
 print "Slicing at x2=",x2slicevalue
 
-fig = plt.figure(1,figsize=(8,11))
-nrows = 3
+fig = plt.figure(1,figsize=(10,9))
+nrows = 2
 ncols = 3
 grid = ImageGrid(fig, 111,  # similar to subplot(111)
                  nrows_ncols=(nrows,ncols),  # creates 2x2 grid of axes
@@ -109,7 +107,7 @@ for i,myfile in enumerate(file_list):
     
     grid[i].plot((x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot),
          (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
-         'w+')
+                 'w*',markersize=3)
     
     grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
     
@@ -128,8 +126,8 @@ plt.clf()
 
 
 
-fig = plt.figure(1,figsize=(8,11))
-nrows = 3
+fig = plt.figure(1,figsize=(10,9))
+nrows = 2
 ncols = 3
 grid = ImageGrid(fig, 111,  # similar to subplot(111)
                  nrows_ncols=(nrows,ncols),  # creates 2x2 grid of axes
@@ -178,7 +176,7 @@ for i,myfile in enumerate(file_list):
 
     grid[i].plot(np.sqrt(x2**2 + y2**2)-np.linalg.norm(rcom),
          z2,
-         'w+')
+                 'w*',markersize=3)
     
     grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
     
