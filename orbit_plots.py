@@ -33,9 +33,9 @@ def p_orb(q,a):
 m1 = 0.631686
 m2 = 0.3
 
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr-diode/"
+base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 
-output_dir = "diode_figures/"
+output_dir = "paper_figures/"
 
 #######################################
 

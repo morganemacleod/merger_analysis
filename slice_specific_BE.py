@@ -23,7 +23,8 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+#base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 
 output_dir = "paper_figures/"
 
@@ -31,7 +32,7 @@ m1 = 0.631686
 m2 = 0.3
 G=1
 
-myfile = base_dir+"HSE.out1.00253.athdf"
+myfile = base_dir+"HSE.out1.00369.athdf"
 
 mycm = plt.cm.RdBu_r
 
@@ -92,7 +93,7 @@ plt.contour(ou.get_plot_array_midplane(xrot),
     
 plt.plot((x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot),
          (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
-         'w+')
+         'w*',markersize=3)
     
 plt.xlabel(r"$x'/R_1$")
 plt.ylabel(r"$y'/R_1$")
@@ -106,3 +107,39 @@ plt.xticks([-10,-5,0,5,10])
 plt.yticks([-10,-5,0,5,10])
 
 plt.savefig(output_dir+"binding_energy_slice_final.pdf",dpi=300,bbox_inches='tight')
+plt.clf()
+
+
+
+#############################
+# DENSITY SLICE
+#############################
+
+im=plt.pcolormesh(ou.get_plot_array_midplane(xrot),
+                  ou.get_plot_array_midplane(yrot),
+                  ou.get_plot_array_midplane( np.log10( d['rho'][:,len(d['x2v'])/2,:] ) )  ,
+                  cmap=plt.cm.bone_r,rasterized=True,
+                  vmin=-8,vmax=0)
+    
+
+#plt.contour(ou.get_plot_array_midplane(xrot),
+#               ou.get_plot_array_midplane(yrot),
+#               ou.get_plot_array_midplane(d['etot'][:,len(d['x2v'])/2,:] /
+#                                          d['rho'][:,len(d['x2v'])/2,:]) ,
+#               levels=[0],colors='k',linewidths=0.5)
+    
+plt.plot((x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot),
+         (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
+         'w*',markersize=3)
+    
+plt.xlabel(r"$x'/R_1$")
+plt.ylabel(r"$y'/R_1$")
+
+
+plt.colorbar(im,label=r'$\log \ \rho \ \ [M_1 / R_1^3]$')
+
+plt.xlim(-25,25)
+plt.ylim(-25,25)
+#plt.xticks([-10,-5,0,5,10])
+#plt.yticks([-10,-5,0,5,10])
+plt.savefig(output_dir+"density_slice_final.pdf",dpi=300,bbox_inches='tight')

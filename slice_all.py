@@ -24,7 +24,7 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/" 
+base_dir =  "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 m1 = 0.631686
 m2 = 0.3
 G=1
@@ -38,8 +38,8 @@ mylevel=2
 
 vmin = -8
 
-#vars = ['rho','press','cs','etot','torque','entropy']
-vars = ['entropy']
+vars = ['rho','press','cs','etot','torque','entropy']
+#vars = ['entropy']
 
 ####################################
 

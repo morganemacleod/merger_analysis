@@ -182,7 +182,7 @@ for i,myfile in enumerate(file_list):
     y2rot = (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot)
     grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
         
-    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-0.3,1.2),color='w',fontsize='large')
         
         
     grid[ind].set_xlim(-0.5,2.5)
@@ -288,7 +288,7 @@ file_list = [full_file_list[-100],
 
 
 
-fig = plt.figure(1,figsize=(11,11))
+fig = plt.figure(1,figsize=(11,10))
 nrows = 2
 ncols = 2
 grid = ImageGrid(fig, 111,  # similar to subplot(111)
@@ -406,7 +406,7 @@ for i,myfile in enumerate(file_list):
 
 
 
-        
+    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.9,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
     grid[ind].set_xlim(-0.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
     grid[ind].set_xlabel(r"$x'/R_1$")
@@ -415,3 +415,182 @@ for i,myfile in enumerate(file_list):
     cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
     
 plt.savefig(output_dir+"ballistic_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
+plt.clf()
+
+
+
+
+
+
+
+
+#######################
+#  OMEGA
+#######################
+
+fcorotation=0.95
+
+sma0 = np.interp(0,orb['time'],orb['sep'])
+Omega0 = fcorotation*np.interp(0,orb['time'],orb['vmag'])/sma0 
+
+fig = plt.figure(1,figsize=(11,10))
+nrows = 2
+ncols = 2
+grid = ImageGrid(fig, 111,  # similar to subplot(111)
+                     nrows_ncols=(nrows,ncols),  # creates 2x2 grid of axes
+                     axes_pad=0.2,  # pad between axes in inch.
+                     cbar_mode='single',
+                     cbar_location='right',
+                     cbar_size="2%",
+                     cbar_pad="2%")
+    
+for i,myfile in enumerate(file_list):
+    print i, myfile 
+        
+    # read the data
+    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
+                         x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
+    t = d['Time']
+        
+    rcom,vcom = ou.rcom_vcom(orb,t)
+    x2,y2,z2 = ou.pos_secondary(orb,t)
+        
+    theta_rot = -np.arctan2(y2,x2)
+    
+    sma = np.interp(t,orb['time'],orb['sep'])
+    Omega = np.interp(t,orb['time'],orb['vmag'])/sma 
+    print sma,Omega
+
+    # ROTATE POSITIONS, VELOCITIES TO COROTATING FRAME
+    xrot = (d['x'][:,len(d['x2v'])/2,:]-rcom[0])*np.cos(theta_rot) - (d['y'][:,len(d['x2v'])/2,:]-rcom[1])*np.sin(theta_rot)
+    yrot = (d['x'][:,len(d['x2v'])/2,:]-rcom[0])*np.sin(theta_rot) + (d['y'][:,len(d['x2v'])/2,:]-rcom[1])*np.cos(theta_rot)
+
+    vxrot = (d['vx'][:,len(d['x2v'])/2,:]-vcom[0])*np.cos(theta_rot) - (d['vy'][:,len(d['x2v'])/2,:]-vcom[1])*np.sin(theta_rot)
+    vyrot = (d['vx'][:,len(d['x2v'])/2,:]-vcom[0])*np.sin(theta_rot) + (d['vy'][:,len(d['x2v'])/2,:]-vcom[1])*np.cos(theta_rot)
+
+
+    phicom = np.arctan2(yrot,xrot)
+
+    vphi = - Omega*np.sqrt(xrot**2 + yrot**2)
+    vxrotC = vxrot - vphi*np.sin(phicom)
+    vyrotC = vyrot + vphi*np.cos(phicom)
+    
+    x2rot = (x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot)
+    y2rot = (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot)
+ 
+    OmegaPlot = d['vel3'][:,len(d['x2v'])/2,:]/d['gx1v'][:,len(d['x2v'])/2,:] - Omega
+
+
+        
+    ##########
+    # Omega
+    #########
+    ind = i
+    im=grid[ind].pcolormesh(
+        ou.get_plot_array_midplane(xrot),
+        ou.get_plot_array_midplane(yrot),
+        ou.get_plot_array_midplane( OmegaPlot ),
+        cmap=plt.cm.PuOr,
+        vmin=-1,vmax=1,rasterized=True)
+    
+    grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
+        
+
+    grid[ind].contour(
+        ou.get_plot_array_midplane(xrot),
+        ou.get_plot_array_midplane(yrot),
+        ou.get_plot_array_midplane( np.log10(d['rho'][:,len(d['x2v'])/2,:]) ),
+        cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17))
+    
+    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.9,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
+    grid[ind].set_xlim(-1.5,2.5)
+    grid[ind].set_ylim(-1.5,1.5)
+    grid[ind].set_xlabel(r"$x'/R_1$")
+    grid[ind].set_ylabel(r"$y'/R_1$")
+    cb = grid.cbar_axes[ind].colorbar(im)
+    cb.set_label_text(r"$\Omega-\Omega_{\rm orb}$")
+    
+plt.savefig(output_dir+"omega_inst_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
+plt.clf()
+
+
+
+fig = plt.figure(1,figsize=(11,10))
+nrows = 2
+ncols = 2
+grid = ImageGrid(fig, 111,  # similar to subplot(111)
+                     nrows_ncols=(nrows,ncols),  # creates 2x2 grid of axes
+                     axes_pad=0.2,  # pad between axes in inch.
+                     cbar_mode='single',
+                     cbar_location='right',
+                     cbar_size="2%",
+                     cbar_pad="2%")
+    
+for i,myfile in enumerate(file_list):
+    print i, myfile 
+        
+    # read the data
+    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
+                         x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
+    t = d['Time']
+        
+    rcom,vcom = ou.rcom_vcom(orb,t)
+    x2,y2,z2 = ou.pos_secondary(orb,t)
+        
+    theta_rot = -np.arctan2(y2,x2)
+    
+    sma = np.interp(t,orb['time'],orb['sep'])
+    Omega = np.interp(t,orb['time'],orb['vmag'])/sma 
+    print sma,Omega
+
+    # ROTATE POSITIONS, VELOCITIES TO COROTATING FRAME
+    xrot = (d['x'][:,len(d['x2v'])/2,:]-rcom[0])*np.cos(theta_rot) - (d['y'][:,len(d['x2v'])/2,:]-rcom[1])*np.sin(theta_rot)
+    yrot = (d['x'][:,len(d['x2v'])/2,:]-rcom[0])*np.sin(theta_rot) + (d['y'][:,len(d['x2v'])/2,:]-rcom[1])*np.cos(theta_rot)
+
+    vxrot = (d['vx'][:,len(d['x2v'])/2,:]-vcom[0])*np.cos(theta_rot) - (d['vy'][:,len(d['x2v'])/2,:]-vcom[1])*np.sin(theta_rot)
+    vyrot = (d['vx'][:,len(d['x2v'])/2,:]-vcom[0])*np.sin(theta_rot) + (d['vy'][:,len(d['x2v'])/2,:]-vcom[1])*np.cos(theta_rot)
+
+
+    phicom = np.arctan2(yrot,xrot)
+
+    vphi = - Omega*np.sqrt(xrot**2 + yrot**2)
+    vxrotC = vxrot - vphi*np.sin(phicom)
+    vyrotC = vyrot + vphi*np.cos(phicom)
+    
+    x2rot = (x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot)
+    y2rot = (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot)
+ 
+    OmegaPlot = d['vel3'][:,len(d['x2v'])/2,:]/d['gx1v'][:,len(d['x2v'])/2,:] - Omega0
+
+
+        
+    ##########
+    #  Omega
+    #########
+    ind = i
+    im=grid[ind].pcolormesh(
+        ou.get_plot_array_midplane(xrot),
+        ou.get_plot_array_midplane(yrot),
+        ou.get_plot_array_midplane( OmegaPlot ),
+        cmap=plt.cm.PuOr,
+        vmin=-1,vmax=1,rasterized=True)
+    
+    grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
+        
+
+    grid[ind].contour(
+        ou.get_plot_array_midplane(xrot),
+        ou.get_plot_array_midplane(yrot),
+        ou.get_plot_array_midplane( np.log10(d['rho'][:,len(d['x2v'])/2,:]) ),
+        cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17))
+    
+    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.9,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
+    grid[ind].set_xlim(-1.5,2.5)
+    grid[ind].set_ylim(-1.5,1.5)
+    grid[ind].set_xlabel(r"$x'/R_1$")
+    grid[ind].set_ylabel(r"$y'/R_1$")
+    cb = grid.cbar_axes[ind].colorbar(im)
+    cb.set_label_text(r"$\Omega-\Omega_0$")
+    
+plt.savefig(output_dir+"omega_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
+plt.clf()
