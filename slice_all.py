@@ -24,22 +24,29 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir =  "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2_f15/"
-m1 = 0.631686
-m2 = 0.3
-G=1
+parser = argparse.ArgumentParser(description='Read m1,m2, input/output directories')
 
+parser.add_argument("m1",type=float,help="mass of particle m1")
+parser.add_argument("m2",type=float,help="mass of particle m2")
+
+parser.add_argument("--base_dir", help="data directory (should end with / )")
+parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
+
+args = parser.parse_args()
+m1=args.m1
+m2=args.m2
+base_dir=args.base_dir
+output_dir=args.output_dir
+
+
+
+
+G=1
 file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
 
-output_dir = "snapshots/sma2_f15/"
-mycm = plt.cm.bone_r
 
 mylevel=2
-
-vmin = -8
-
 vars = ['rho','press','cs','etot','torque','entropy']
-#vars = ['entropy']
 
 ####################################
 
@@ -89,6 +96,8 @@ for i,myfile in enumerate(file_list):
 
 
     if 'rho' in vars:
+        vmin=-8
+        mycm = plt.cm.bone_r
         plt.figure(figsize=(6.2,5))
         im=plt.pcolormesh(
             ou.get_plot_array_midplane(xrot),

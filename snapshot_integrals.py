@@ -5,15 +5,25 @@ from glob import glob
 import OrbitAnalysisUtils as ou
 
 ### SIMULATION PARAMS ######
-m1 = 0.631686
-m2 = 0.3
+parser = argparse.ArgumentParser(description='Read m1,m2, input/output directories')
 
-base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
-output_dir = "paper_figures/"
+parser.add_argument("m1",type=float,help="mass of particle m1")
+parser.add_argument("m2",type=float,help="mass of particle m2")
 
-#filelist = glob(base_dir+"HSE.out1.002[0-9][0-9].athdf")
+parser.add_argument("--base_dir", help="data directory (should end with / )")
+parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
+parser.add_argument("--first_file_index",help="neg number of index for first file in list eg. -100",default=-30,type=int)
+
+
+args = parser.parse_args()
+m1=args.m1
+m2=args.m2
+base_dir=args.base_dir
+output_dir=args.output_dir
+
+
 filelist = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
-filelist = filelist[-200:-1]
+filelist = filelist[args.first_file_index:-1]
 print filelist
 
 radii = [1,2,3,4,6,10,15,20,30]

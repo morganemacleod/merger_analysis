@@ -44,11 +44,6 @@ m2=args.m2
 base_dir=args.base_dir
 output_dir=args.output_dir
 
-#m1 = 0.631686
-#m2 = 0.3
-#base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
-#output_dir = "paper_figures/"
-
 #######################################
 
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
