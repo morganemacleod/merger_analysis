@@ -8,6 +8,7 @@ import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 import OrbitAnalysisUtils as ou
+import argparse
 
 # set some global options
 plt.rcParams['figure.figsize'] = (6,5)
@@ -29,13 +30,24 @@ def p_orb(q,a):
     return 2*np.pi*np.sqrt(a**3/(1+q))
 
 ####### SIMULATION PARAMS  ############
+parser = argparse.ArgumentParser(description='Read m1,m2, input/output directories')
 
-m1 = 0.631686
-m2 = 0.3
+parser.add_argument("m1",type=float,help="mass of particle m1")
+parser.add_argument("m2",type=float,help="mass of particle m2")
 
-base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+parser.add_argument("--base_dir", help="data directory (should end with / )")
+parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
 
-output_dir = "paper_figures/"
+args = parser.parse_args()
+m1=args.m1
+m2=args.m2
+base_dir=args.base_dir
+output_dir=args.output_dir
+
+#m1 = 0.631686
+#m2 = 0.3
+#base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+#output_dir = "paper_figures/"
 
 #######################################
 

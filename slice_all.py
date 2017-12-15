@@ -24,14 +24,14 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir =  "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
+base_dir =  "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2_f15/"
 m1 = 0.631686
 m2 = 0.3
 G=1
 
 file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
 
-output_dir = "snapshots/sma2/"
+output_dir = "snapshots/sma2_f15/"
 mycm = plt.cm.bone_r
 
 mylevel=2

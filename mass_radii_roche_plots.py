@@ -27,15 +27,22 @@ plt.rcParams['font.size'] = 16
 m1 = 0.631686
 m2 = 0.3
 
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr-diode/"
+base_dir =  "/Volumes/DATAVolume/athenaruns/pm_envelope/smr_RL_hr_lr2/"
 
-output_dir = "diode_figures/"
+output_dir = "paper_figures/"
 
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 
 t1=ou.get_t1(orb)
 
 
+
+hst = ascii.read(base_dir+"HSE.hst",
+                 names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv'])
+
+mg = hst['mass'][0]
+M1=mg+m1
+print m1, mg, M1
 
 
 
@@ -98,20 +105,22 @@ select = mr['time']-t1>tmin
 cols = mr.colnames[3:-1]
 print "plotting columns,",cols
 for i,colname in enumerate(cols):
-    plt.plot(mr[select]['time']-t1,mr[select][colname],
+    plt.plot(mr[select]['time']-t1,
+             (mr[select][colname]+m1)/M1,
             color=mycm(float(i)/(len(cols)-1) ),
             label=labels[i],lw=2)
 
 
 plt.xlabel("$t-t_1 \ \ [( R_1^3 / GM_1 )^{1/2}]$")
-plt.ylabel("Enclosed Gas Mass $[M_1]$")
+plt.ylabel("Enclosed Mass $[M_1]$")
 plt.legend(loc=0,frameon=True)
 plt.grid()
 
 plt.subplot(122)
 
 for i,colname in enumerate(cols):
-    plt.plot(mr[select]['sep'],mr[select][colname],
+    plt.plot(mr[select]['sep'],
+             (mr[select][colname]+m1)/M1,
             color=mycm(float(i)/(len(cols)-1) ),
             label=labels[i],lw=2)
 
