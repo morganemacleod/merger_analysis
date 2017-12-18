@@ -1,6 +1,7 @@
 # normal stuff
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+mpl.use('agg')
+import matplotlib.pyplot as plt
 import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
@@ -35,8 +36,8 @@ parser = argparse.ArgumentParser(description='Read m1,m2, input/output directori
 parser.add_argument("m1",type=float,help="mass of particle m1")
 parser.add_argument("m2",type=float,help="mass of particle m2")
 
-parser.add_argument("--base_dir", help="data directory (should end with / )")
-parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
+parser.add_argument("--base_dir", help="data directory (should end with / )",type=str)
+parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )",type=str)
 
 args = parser.parse_args()
 m1=args.m1
@@ -117,9 +118,10 @@ plt.legend(loc=0)
 plt.xlabel(r'$t-t_1 \ [(R_1^3/GM_1)^{1/2}]$')
 plt.ylabel(r'$\hat z$ angular momenta $\left[(GM_1 R_1)^{1/2} \right]$')
 plt.xlim(orb['time'][0]-t1,10)
-plt.savefig("paper_figures/ang_mom_time.pdf",bbox_inches='tight')
+plt.savefig(output_dir+"ang_mom_time.pdf",bbox_inches='tight')
 plt.clf()
 
+plt.figure()
 plt.plot(orb['sep'], orb['ltz']/orb['ltz'][0],label=r'total $L_z$',lw=2,color='k' )
 plt.legend(loc=0)
 plt.xlabel(r'separation $[R_1]$')
@@ -205,3 +207,4 @@ plt.grid()
 
 plt.subplots_adjust(wspace=0.0)
 plt.savefig(output_dir+"torque_time_sep.pdf",bbox_inches='tight')
+plt.clf()
