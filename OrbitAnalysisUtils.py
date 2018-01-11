@@ -114,7 +114,7 @@ def get_Omega_env_dist(fn,dv=0.05,G=1,rho_thresh=1.e-2,level=2):
     return mydist, np.average(vpf,weights=dmf)
 
 
-def read_data(fn,orb,m1,m2,dt=1,G=1,rsoft2=0.1,level=0,
+def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
              get_cartesian=True,get_torque=False,get_energy=False,
              x1_min=None,x1_max=None,
              x2_min=None,x2_max=None,
@@ -342,3 +342,62 @@ def get_roche_function(orb,time,M1=1,M2=0.3):
     b = makebinary(M1,M2,a)
     xL,phiL = b.get_xL_phiL(points=100)
     return xL, phiL, b.get_phi_function()
+
+
+
+def get_plot_array_vertical(quantity,phislice,
+                            myfile,profile_file,orb,m1,m2,
+                           G=1,rsoft2=0.1,level=0,
+                           x1_max=None):
+    
+    dblank=ar.athdf(myfile,level=level,quantities=[],subsample=True)
+    
+    
+    
+    get_cartesian=True
+    get_torque=False
+    get_energy=False
+    if quantity in ['torque_dens_1_z','torque_dens_2_z']:
+        get_torque=True
+    if quantity in ['ek','ei','etot','epot']:
+        get_energy=True
+    
+    x3slicevalue = dblank['x3v'][np.argmin(np.abs(dblank['x3v']+phislice))]
+    d=read_data(myfile,orb,m1,m2,G=G,rsoft2=rsoft2,level=level,
+                get_cartesian=get_cartesian,
+                get_torque=get_torque,
+                get_energy=get_energy,
+                x1_max=x1_max,x3_min=x3slicevalue,x3_max=x3slicevalue,
+                profile_file=profile_file)
+    
+    x1 = d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])
+    z1 = d['z'][0,:,:]
+    val1 = d[quantity][0,:,:]
+    
+    if(x3slicevalue<0):
+        x3slicevalue += np.pi
+    else:
+        x3slicevalue -= np.pi
+    
+    d=read_data(myfile,orb,m1,m2,G=G,rsoft2=rsoft2,level=level,
+                get_cartesian=get_cartesian,
+                get_torque=get_torque,
+                get_energy=get_energy,
+                x1_max=x1_max,x3_min=x3slicevalue,x3_max=x3slicevalue,
+                profile_file=profile_file)
+    
+    x2 = -d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])
+    z2 = d['z'][0,:,:]
+    val2 = d[quantity][0,:,:]
+    
+    # Combine the arrays
+    x = np.concatenate((x2,np.flipud(x1)))
+    z = np.concatenate((z2,np.flipud(z1)))
+    val = np.concatenate((val2,np.flipud(val1)))
+
+    x = np.concatenate((x,x2[0:1]) ,axis=0)
+    z = np.concatenate((z,z2[0:1]) ,axis=0)
+    val = np.concatenate((val,val2[0:1]) ,axis=0)
+    
+    return x,z,val
+

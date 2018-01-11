@@ -97,7 +97,7 @@ for i,myfile in enumerate(file_list):
 
     if 'rho' in vars:
         vmin=-8
-        mycm = plt.cm.bone_r
+        mycm = plt.cm.magma
         plt.figure(figsize=(6.2,5))
         im=plt.pcolormesh(
             ou.get_plot_array_midplane(xrot),
@@ -109,6 +109,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(-5,5)
         plt.ylim(-5,5)
         plt.xlabel(r"$x'/R_1$")
@@ -128,6 +129,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(x2p_com-1,x2p_com+1)
         plt.ylim(y2p_com-1,y2p_com+1)
         plt.xlabel(r"$x'/R_1$")
@@ -150,6 +152,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
 
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(-5,5)
         plt.ylim(-5,5)
         plt.xlabel(r"$x'/R_1$")
@@ -169,6 +172,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
 
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(x2p_com-1,x2p_com+1)
         plt.ylim(y2p_com-1,y2p_com+1)
         plt.xlabel(r"$x'/R_1$")
@@ -191,6 +195,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(-5,5)
         plt.ylim(-5,5)
         plt.xlabel(r"$x'/R_1$")
@@ -211,6 +216,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(x2p_com-1,x2p_com+1)
         plt.ylim(y2p_com-1,y2p_com+1)
         plt.xlabel(r"$x'/R_1$")
@@ -232,6 +238,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(-5,5)
         plt.ylim(-5,5)
         plt.xlabel(r"$x'/R_1$")
@@ -251,6 +258,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(x2p_com-1,x2p_com+1)
         plt.ylim(y2p_com-1,y2p_com+1)
         plt.xlabel(r"$x'/R_1$")
@@ -274,6 +282,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(-5,5)
         plt.ylim(-5,5)
         plt.xlabel(r"$x'/R_1$")
@@ -295,6 +304,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(x2p_com-1,x2p_com+1)
         plt.ylim(y2p_com-1,y2p_com+1)
         plt.xlabel(r"$x'/R_1$")
@@ -319,6 +329,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(-5,5)
         plt.ylim(-5,5)
         plt.xlabel(r"$x'/R_1$")
@@ -341,6 +352,7 @@ for i,myfile in enumerate(file_list):
         plt.plot(x2p_com,y2p_com,'w*')
     
         plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        plt.axis('equal')
         plt.xlim(x2p_com-1,x2p_com+1)
         plt.ylim(y2p_com-1,y2p_com+1)
         plt.xlabel(r"$x'/R_1$")
