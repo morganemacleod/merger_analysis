@@ -1,8 +1,11 @@
+import matplotlib as mpl
+mpl.use('agg')
 import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
 from glob import glob
 import OrbitAnalysisUtils as ou
+import argparse
 
 ### SIMULATION PARAMS ######
 parser = argparse.ArgumentParser(description='Read m1,m2, input/output directories')
@@ -22,7 +25,7 @@ base_dir=args.base_dir
 output_dir=args.output_dir
 
 
-filelist = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
+filelist = sorted(glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf"))
 filelist = filelist[args.first_file_index:-1]
 print filelist
 

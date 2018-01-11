@@ -1,5 +1,6 @@
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+mpl.use('agg')
+import matplotlib.pyplot as plt
 import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
@@ -9,6 +10,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import OrbitAnalysisUtils as ou
 from mpl_toolkits.axes_grid1 import ImageGrid
 import matplotlib.colors as colors
+import argparse
 
 # set some global options
 plt.rcParams['figure.figsize'] = (6,5)
@@ -38,12 +40,9 @@ m2=args.m2
 base_dir=args.base_dir
 output_dir=args.output_dir
 
-
-
-
 G=1
-file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
-
+file_list = sorted(glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf"))
+print file_list
 
 mylevel=2
 vars = ['rho','press','cs','etot','torque','entropy']
