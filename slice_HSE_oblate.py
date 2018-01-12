@@ -7,6 +7,7 @@ import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 import OrbitAnalysisUtils as ou
+from mpl_toolkits.axes_grid1 import ImageGrid
 
 # set some global options
 plt.rcParams['figure.figsize'] = (6,5)
@@ -53,7 +54,16 @@ def get_midplane_theta(myfile,level=0):
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 
 
-
+fig = plt.figure(1,figsize=(10,9))
+nrows = 2
+ncols = 1
+grid = ImageGrid(fig, 111,  # similar to subplot(111)
+                 nrows_ncols=(nrows,ncols),  # creates 2x2 grid of axes
+                 axes_pad=0.3,  # pad between axes in inch.
+                 cbar_mode='each',
+                 cbar_location='right',
+                 cbar_size="6%",
+                 cbar_pad="5%",)
 
 
 
@@ -71,26 +81,27 @@ x,z,rho = ou.get_plot_array_vertical("rho",0,
                        G=1,rsoft2=0.05,level=0,x1_max=3)
 
   
-im=plt.pcolormesh(x,z,vel1,
+im=grid[1].pcolormesh(x,z,vel1,
                   cmap=mycm,
                   vmin=-0.1,vmax=0.1,rasterized=True)
 
-plt.contour(x,z,rho,
+grid[1].contour(x,z,rho,
             levels=[1.e-5],colors='k',linewidths=0.5)
 
 
-plt.colorbar(im,label='Radial Velocity $[(G M_1 / R_1)^{1/2}]$')
+cb=grid.cbar_axes[1].colorbar(im)
+cb.set_label_text(r'Radial Velocity $[(G M_1 / R_1)^{1/2}]$')
 
-plt.axis('equal')
-plt.xlim(-2,2)
-plt.ylim(-2,2)
+grid[1].axis('equal')
+grid[1].set_xlim(-2,2)
+grid[1].set_ylim(-2,2)
 
 
-plt.xlabel(r"$x/R_1$")
-plt.ylabel(r"$z/R_1$")
+grid[1].set_xlabel(r"$x/R_1$")
+grid[1].set_ylabel(r"$z/R_1$")
 
-plt.savefig(output_dir+"hse_3D_vel.pdf",dpi=300,bbox_inches='tight')
-plt.clf()
+#plt.savefig(output_dir+"hse_3D_vel.pdf",dpi=300,bbox_inches='tight')
+#plt.clf()
 
 
 ##############
@@ -104,22 +115,23 @@ x,z,rho = ou.get_plot_array_vertical("rho",0,
                        myfile,base_dir+"hse_profile.dat",orb,m1,m2,
                        G=1,rsoft2=0.05,level=0,x1_max=3)
 
-im=plt.pcolormesh(x,z,np.log10(rho),
+im=grid[0].pcolormesh(x,z,np.log10(rho),
                   cmap=mycm,
                   vmin=-8,vmax=0,rasterized=True)
 
 
-plt.colorbar(im,label=r'$\log \ \rho \ \ [M_1 / R_1^3]$')
+cb=grid.cbar_axes[0].colorbar(im)
+cb.set_label_text(r'$\log \ \rho \ \ [M_1 / R_1^3]$')
 
 
-plt.xlabel(r"$x/R_1$")
-plt.ylabel(r"$z/R_1$")
+grid[0].set_xlabel(r"$x/R_1$")
+grid[0].set_ylabel(r"$z/R_1$")
 
-plt.axis('equal')
-plt.xlim(-2,2)
-plt.ylim(-2,2)
+grid[0].axis('equal')
+grid[0].set_xlim(-2,2)
+grid[0].set_ylim(-2,2)
 
-plt.savefig(output_dir+"hse_3D_density.pdf",dpi=300,bbox_inches='tight')
+plt.savefig(output_dir+"hse_3D.pdf",dpi=300,bbox_inches='tight')
 plt.clf()
 
 
