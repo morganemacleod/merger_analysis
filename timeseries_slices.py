@@ -24,21 +24,21 @@ plt.rcParams['font.size'] = 16
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/" 
+base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/pole/syncRL/fcorot_series/a206_res24_fc10/"
 
 output_dir = "paper_figures/"
 
-m1 = 0.631686
+m1 = 0.410103
 m2 = 0.3
 G=1
 
 full_file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
 
-file_list = [full_file_list[-100],
-             full_file_list[-35],
-             full_file_list[-15],
-             full_file_list[-5],
-             full_file_list[-2],
+file_list = [full_file_list[-322],
+             full_file_list[-62],
+             full_file_list[-32],
+             full_file_list[-23],
+             full_file_list[-13],
              full_file_list[-1]]
 
 
@@ -46,8 +46,8 @@ file_list = [full_file_list[-100],
 
 mylevel=2
 
-vars = ['density','pressure','entropy', 'torque','cs']
-#vars = ['entropy']
+#vars = ['density','pressure','entropy', 'torque','cs']
+vars = ['entropy']
 
 ####################################
 
@@ -79,7 +79,7 @@ if 'density' in vars:
 
     print " MAKING DENSITY TIMESERIES "
 
-    mycm = plt.cm.bone_r
+    mycm = plt.cm.magma
     vmin = -8
 
     
@@ -98,7 +98,7 @@ if 'density' in vars:
         print i, myfile 
         
         # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
+        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=False,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
         t = d['Time']
         
@@ -123,8 +123,9 @@ if 'density' in vars:
                      (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
-        
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='w',fontsize='small')
+
+        grid[i].axis('equal')
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
@@ -164,40 +165,22 @@ if 'density' in vars:
         x2,y2,z2 = ou.pos_secondary(orb,t)
         
         theta_rot = -np.arctan2(y2,x2)
-        x3slicevalue = dblank['x3v'][np.argmin(np.abs(dblank['x3v']+theta_rot))]
-        print "x3=",x3slicevalue
         # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
-        
-        
-        im=grid[i].pcolormesh(d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                              d['z'][0,:,:],
-                              np.log10(d['rho'][0,:,:]),
-                              cmap=mycm,
-                              vmin=vmin,vmax=0,rasterized=True)
-        
-        if(x3slicevalue<0):
-            x3slicevalue += np.pi
-        else:
-            x3slicevalue -= np.pi
-        print "x3=",x3slicevalue
-        # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
-        
-        im=grid[i].pcolormesh(-d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                            d['z'][0,:,:],
-                              np.log10(d['rho'][0,:,:]),
-                              cmap=mycm,
-                              vmin=vmin,vmax=0,rasterized=True)
-        
+        x,z,val = ou.get_plot_array_vertical("rho",theta_rot,
+                       myfile,base_dir+"hse_profile.dat",orb,m1,m2,
+                                             G=1,rsoft2=0.05,level=0,x1_max=7.5)
+
+        im=grid[i].pcolormesh(x-np.linalg.norm(rcom),z,np.log10(val),
+                  cmap=mycm,
+                  vmin=vmin,vmax=0,rasterized=True)
+
         grid[i].plot(np.sqrt(x2**2 + y2**2)-np.linalg.norm(rcom),
                      z2,
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
-        
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='w',fontsize='small')
+
+        grid[i].axis('equal')
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
@@ -240,7 +223,7 @@ if 'pressure' in vars:
         print i, myfile 
         
         # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=True,
+        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=True,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
         t = d['Time']
         
@@ -265,7 +248,7 @@ if 'pressure' in vars:
                      (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='w',fontsize='small')
         
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
@@ -305,39 +288,19 @@ if 'pressure' in vars:
         x2,y2,z2 = ou.pos_secondary(orb,t)
         
         theta_rot = -np.arctan2(y2,x2)
-        x3slicevalue = dblank['x3v'][np.argmin(np.abs(dblank['x3v']+theta_rot))]
-        print "x3=",x3slicevalue
-        # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
-        
-        
-        im=grid[i].pcolormesh(d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                              d['z'][0,:,:],
-                              np.log10(d['press'][0,:,:]),
-                              cmap=mycm,
-                              vmin=vmin,vmax=0,rasterized=True)
-        
-        if(x3slicevalue<0):
-            x3slicevalue += np.pi
-        else:
-            x3slicevalue -= np.pi
-        print "x3=",x3slicevalue
-        # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
-        
-        im=grid[i].pcolormesh(-d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                              d['z'][0,:,:],
-                              np.log10(d['press'][0,:,:]),
-                              cmap=mycm,
-                              vmin=vmin,vmax=0,rasterized=True)
+        x,z,val = ou.get_plot_array_vertical("press",theta_rot,
+                                             myfile,base_dir+"hse_profile.dat",orb,m1,m2,
+                                             G=1,rsoft2=0.05,level=0,x1_max=7.5)
+
+        im=grid[i].pcolormesh(x-np.linalg.norm(rcom),z,np.log10(val),
+                  cmap=mycm,
+                  vmin=vmin,vmax=0,rasterized=True)
         
         grid[i].plot(np.sqrt(x2**2 + y2**2)-np.linalg.norm(rcom),
                      z2,
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='w',fontsize='small')
         
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
@@ -382,7 +345,7 @@ if 'entropy' in vars:
         print i, myfile 
         
         # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=True,
+        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=True,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
         t = d['Time']
         
@@ -407,7 +370,7 @@ if 'entropy' in vars:
                      (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='k',fontsize='small')
         
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
@@ -448,39 +411,23 @@ if 'entropy' in vars:
         x2,y2,z2 = ou.pos_secondary(orb,t)
         
         theta_rot = -np.arctan2(y2,x2)
-        x3slicevalue = dblank['x3v'][np.argmin(np.abs(dblank['x3v']+theta_rot))]
-        print "x3=",x3slicevalue
-        # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
+        x,z,rho = ou.get_plot_array_vertical("rho",theta_rot,
+                                             myfile,base_dir+"hse_profile.dat",orb,m1,m2,
+                                             G=1,rsoft2=0.05,level=0,x1_max=7.5)
+        x,z,pres = ou.get_plot_array_vertical("rho",theta_rot,
+                                             myfile,base_dir+"hse_profile.dat",orb,m1,m2,
+                                             G=1,rsoft2=0.05,level=0,x1_max=7.5)
+        val = pres/rho**(5./3.)
         
-        
-        im=grid[i].pcolormesh(d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                              d['z'][0,:,:],
-                              np.log(d['press'][0,:,:]/d['rho'][0,:,:]**(5./3.) ),
-                              cmap=mycm,
-                              vmin=vmin,vmax=vmax,rasterized=True)
-        
-        if(x3slicevalue<0):
-            x3slicevalue += np.pi
-        else:
-            x3slicevalue -= np.pi
-        print "x3=",x3slicevalue
-        # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
-        
-        im=grid[i].pcolormesh(-d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                              d['z'][0,:,:],
-                              np.log(d['press'][0,:,:]/d['rho'][0,:,:]**(5./3.) ),
-                              cmap=mycm,
-                              vmin=vmin,vmax=vmax,rasterized=True)
+        im=grid[i].pcolormesh(x-np.linalg.norm(rcom),z,np.log(val),
+                  cmap=mycm,
+                  vmin=vmin,vmax=vmax,rasterized=True)
         
         grid[i].plot(np.sqrt(x2**2 + y2**2)-np.linalg.norm(rcom),
                      z2,
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='k',fontsize='small')
         
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
@@ -527,7 +474,7 @@ if 'cs' in vars:
         print i, myfile 
         
         # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=True,
+        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=True,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
         t = d['Time']
         
@@ -552,7 +499,7 @@ if 'cs' in vars:
                      (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='k',fontsize='small')
         
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
@@ -593,39 +540,24 @@ if 'cs' in vars:
         x2,y2,z2 = ou.pos_secondary(orb,t)
         
         theta_rot = -np.arctan2(y2,x2)
-        x3slicevalue = dblank['x3v'][np.argmin(np.abs(dblank['x3v']+theta_rot))]
-        print "x3=",x3slicevalue
-        # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
-        
-        
-        im=grid[i].pcolormesh(d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                              d['z'][0,:,:],
-                              np.log10(np.sqrt(5./3.*d['press'][0,:,:]/d['rho'][0,:,:] )),
-                              cmap=mycm,
-                              vmin=vmin,vmax=0,rasterized=True)
-        
-        if(x3slicevalue<0):
-            x3slicevalue += np.pi
-        else:
-            x3slicevalue -= np.pi
-        print "x3=",x3slicevalue
-        # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
-                         x1_max=7.5,x3_min=x3slicevalue,x3_max=x3slicevalue)
-        
-        im=grid[i].pcolormesh(-d['gx1v'][0,:,:]*np.sin(d['gx2v'][0,:,:])-np.linalg.norm(rcom),
-                              d['z'][0,:,:],
-                              np.log10(np.sqrt(5./3.*d['press'][0,:,:]/d['rho'][0,:,:] )),
-                              cmap=mycm,
-                              vmin=vmin,vmax=vmax,rasterized=True)
+        x,z,rho = ou.get_plot_array_vertical("rho",theta_rot,
+                       myfile,base_dir+"hse_profile.dat",orb,m1,m2,
+                                             G=1,rsoft2=0.05,level=0,x1_max=7.5)
+        x,z,pres = ou.get_plot_array_vertical("press",theta_rot,
+                       myfile,base_dir+"hse_profile.dat",orb,m1,m2,
+                                             G=1,rsoft2=0.05,level=0,x1_max=7.5)
+
+        val = np.sqrt(5./3. * pres/rho)
+
+        im=grid[i].pcolormesh(x-np.linalg.norm(rcom),z,np.log10(val),
+                  cmap=mycm,
+                  vmin=vmin,vmax=0,rasterized=True)
         
         grid[i].plot(np.sqrt(x2**2 + y2**2)-np.linalg.norm(rcom),
                      z2,
                      'w*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,4),color='k',fontsize='small')
         
         grid[i].set_xlim(-5,5)
         grid[i].set_ylim(-5,5)
@@ -663,7 +595,7 @@ if 'torque' in vars:
         print i, myfile 
         
         # read the data
-        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=True,
+        d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=True,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     
         t = d['Time']
@@ -699,7 +631,7 @@ if 'torque' in vars:
         grid[i].set_xlabel(r"$x'/R_1$")
         grid[i].set_ylabel(r"$y'/R_1$")
 
-        fig.colorbar(im,cax=grid.cbar_axes[i],label='torque density (z) $[GM_1^2/R_1^4]$')
+        fig.colorbar(im,cax=grid.cbar_axes[i],label=r'torque density (z) $[GM_1^2/R_1^4]$')
 
 
     print "\n\n saving ... ",output_dir+"torque_timeseries_midplane.pdf\n\n"

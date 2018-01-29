@@ -84,7 +84,7 @@ def interpolate_vxC_vyC(interpoints):
 
 
 ###### SIMULATION PARAMS   #########
-base_dir = "/Users/morganmacleod/DATA/athenaruns/pm_envelope/smr_RL_hr_lr2/" 
+base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/pole/syncRL/fcorot_series/a206_res24_fc10/" 
 
 output_dir = "paper_figures/"
 
@@ -94,8 +94,8 @@ G=1
 
 full_file_list = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
 
-file_list = [full_file_list[-100],
-             full_file_list[-2]]
+file_list = [full_file_list[-322],
+             full_file_list[-13]]
 
 
 
@@ -143,6 +143,7 @@ for i,myfile in enumerate(file_list):
     d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     t = d['Time']
+    print "t=",t
         
     rcom,vcom = ou.rcom_vcom(orb,t)
     x2,y2,z2 = ou.pos_secondary(orb,t)
@@ -175,7 +176,7 @@ for i,myfile in enumerate(file_list):
         ou.get_plot_array_midplane(xrot),
         ou.get_plot_array_midplane(yrot),
         ou.get_plot_array_midplane(np.log10(d['rho'][:,len(d['x2v'])/2,:]) ),
-        cmap=plt.cm.bone_r,
+        cmap=plt.cm.magma,
         vmin=-8,vmax=0,rasterized=True)
     
     x2rot = (x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot)
@@ -279,10 +280,10 @@ plt.clf()
 
 
 ###### SIMULATION PARAMS   #########
-file_list = [full_file_list[-100],
-             full_file_list[-30],
-             full_file_list[-10],
-             full_file_list[-2]]
+file_list = [full_file_list[-322],
+             full_file_list[-62],
+             full_file_list[-32],
+             full_file_list[-13]]
 
 ####################################
 
@@ -366,7 +367,7 @@ for i,myfile in enumerate(file_list):
     
     
     # CONSTRUCT INITIAL VALUES
-    width = 0.05
+    width = 0.03
     npoints = 30
     x0 = xL[1] + np.random.normal(0,width/3,npoints) + width
     y0 = 0 + np.random.normal(0,width,npoints)
