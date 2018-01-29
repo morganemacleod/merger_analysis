@@ -192,7 +192,7 @@ plt.plot(orb[select]['time']-t1,orb[select]['t2'],':',label=r'$2$',lw=2)
 plt.plot(orb[select]['time']-t1,orb[select]['t1']+orb[select]['t2'],'k-',label='total')
 plt.legend(loc=0,handletextpad=0.5,frameon=True)
 plt.xlabel("$t-t_1 \ \ [( R_1^3 / GM_1 )^{1/2}]$")
-plt.ylabel(r'$\tau_{\rm grav} \ \  left[G M_1^2 / R_1  \right]$')
+plt.ylabel(r'$\tau_{\rm grav} \ \  \left[G M_1^2 / R_1  \right]$')
 plt.grid()
 
 plt.subplot(122)
