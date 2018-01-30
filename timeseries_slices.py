@@ -693,7 +693,7 @@ if 'h' in vars:
         grid[i].contour(ou.get_plot_array_midplane(xrot),
                     ou.get_plot_array_midplane(yrot),
                     ou.get_plot_array_midplane(np.log10(d['rho'][:,len(d['x2v'])/2,:])) ,
-                        levels=[-5,-4,-3,-2,-1],colors='k',linewidths=0.5,linestyles='-')
+                        levels=[-5,-4,-3,-2,-1],colors='k',linewidths=0.5,linestyles='solid')
     
         grid[i].plot((x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot),
                      (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
