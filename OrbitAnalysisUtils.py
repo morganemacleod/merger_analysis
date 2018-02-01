@@ -217,19 +217,19 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
         
         fdens2x = G*m2*d['rho']*soft_grav * (d['x']-x2)
         fdens2y = G*m2*d['rho']*soft_grav * (d['y']-y2)
-        fdens2z = G*m2*d['rho']*soft_grav * (d['z']-z2)
+        #fdens2z = G*m2*d['rho']*soft_grav * (d['z']-z2)
 
         fdens1x = G*m1*d['rho']/dist1c * d['x']
         fdens1y = G*m1*d['rho']/dist1c * d['y']
-        fdens1z = G*m1*d['rho']/dist1c * d['z']
+        #fdens1z = G*m1*d['rho']/dist1c * d['z']
 
         del dist1c,dist2
+
+        d['torque_dens_2_z'] = (x2-rcom[0])*fdens2y - (y2-rcom[1])*fdens2x
+        d['torque_dens_1_z'] = (-rcom[0])*fdens1y - (-rcom[1])*fdens1x
         
-        d['torque_dens_2_z'] = (d['x']-rcom[0])*fdens2y - (d['y']-rcom[1])*fdens2x
-        d['torque_dens_1_z'] = (d['x']-rcom[0])*fdens1y - (d['y']-rcom[1])*fdens1x
-        
-        del fdens2x,fdens2y,fdens2z
-        del fdens1x,fdens1y,fdens1z
+        del fdens2x,fdens2y #,fdens2z
+        del fdens1x,fdens1y #,fdens1z
 
     if(get_energy):
         hse_prof = ascii.read(profile_file,

@@ -47,7 +47,8 @@ file_list = [full_file_list[-322],
 mylevel=2
 
 #vars = ['density','pressure','entropy', 'torque','cs']
-vars = ['h']
+vars = ['torque']
+
 
 ####################################
 
@@ -621,13 +622,20 @@ if 'torque' in vars:
         grid[i].plot((x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot),
                      (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot),
                      'w*',markersize=3)
-    
+
+        grid[i].plot(0,0,
+                     'kx',markersize=3)
+        
+        grid[i].plot((0-rcom[0])*np.cos(theta_rot)-(0-rcom[1])*np.sin(theta_rot),
+                     (0-rcom[0])*np.sin(theta_rot)+(0-rcom[1])*np.cos(theta_rot),
+                     'b*',markersize=3)
+        
         grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
         
-        grid[i].set_xlim(-5,5)
-        grid[i].set_ylim(-5,5)
-        grid[i].set_xticks([-4,0,4])
-        grid[i].set_yticks([-4,0,4])
+        grid[i].set_xlim(-3,3)
+        grid[i].set_ylim(-3,3)
+        grid[i].set_xticks([-2,0,2])
+        grid[i].set_yticks([-2,0,2])
         grid[i].set_xlabel(r"$x'/R_1$")
         grid[i].set_ylabel(r"$y'/R_1$")
 
