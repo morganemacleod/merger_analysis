@@ -139,7 +139,7 @@ if 'density' in vars:
 
     print "\n\n saving .... " , output_dir+"density_timeseries_midplane.pdf \n\n"
     plt.savefig(output_dir+"density_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
         
 
@@ -194,7 +194,7 @@ if 'density' in vars:
 
     print "\n\n saving ... ", output_dir+"density_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"density_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
 
 
@@ -262,7 +262,7 @@ if 'pressure' in vars:
 
     print "\n\n saving ... ", output_dir+"pressure_timeseries_midplane.pdf\n\n"
     plt.savefig(output_dir+"pressure_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
         
 
@@ -314,7 +314,7 @@ if 'pressure' in vars:
         
     print "\n\n saving... ",output_dir+"pressure_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"pressure_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
 
 
@@ -385,7 +385,7 @@ if 'entropy' in vars:
 
     print "\n\n saving ... ",output_dir+"entropy_timeseries_midplane.pdf \n\n"
     plt.savefig(output_dir+"entropy_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
         
 
@@ -441,7 +441,7 @@ if 'entropy' in vars:
             
     print "\n\n saving ... ",output_dir+"entropy_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"entropy_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
 
 
@@ -514,7 +514,7 @@ if 'cs' in vars:
 
     print "\n\n saving ... ",output_dir+"soundspeed_timeseries_midplane.pdf \n\n"
     plt.savefig(output_dir+"soundspeed_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
         
 
@@ -571,7 +571,7 @@ if 'cs' in vars:
             
     print "\n\n saving ... ",output_dir+"soundspeed_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"soundspeed_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
 
 ###############
@@ -580,7 +580,7 @@ if 'cs' in vars:
 if 'torque' in vars:
     print "   TORQUE   "
     mycm = plt.cm.PiYG
-    vmin = -8
+
     fig = plt.figure(1,figsize=(10,9))
     nrows = 2
     ncols = 3
@@ -592,8 +592,6 @@ if 'torque' in vars:
                      cbar_size="2%",
                      cbar_pad="2%",)
 
-
-
     for i,myfile in enumerate(file_list):
         print i, myfile 
         
@@ -601,7 +599,7 @@ if 'torque' in vars:
         d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=True,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     
-        t = d['Time']
+        t = 100.#d['Time']
         
         rcom,vcom = ou.rcom_vcom(orb,t)
         x2,y2,z2 = ou.pos_secondary(orb,t)
@@ -617,7 +615,7 @@ if 'torque' in vars:
             ou.get_plot_array_midplane(xrot),
             ou.get_plot_array_midplane(yrot),
             ou.get_plot_array_midplane(d['torque_dens_1_z'][:,len(d['x2v'])/2,:] +
-                                       d['torque_dens_2_z'][:,len(d['x2v'])/2,:]) ,
+                                        d['torque_dens_2_z'][:,len(d['x2v'])/2,:]) ,
             cmap=mycm,rasterized=True,
             norm=colors.SymLogNorm(linthresh=1.e-6,vmin=-1.0, vmax=1.0))
         
@@ -632,7 +630,7 @@ if 'torque' in vars:
                      (0-rcom[0])*np.sin(theta_rot)+(0-rcom[1])*np.cos(theta_rot),
                      'b*',markersize=3)
         
-        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
+        grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-1.8,2.),color='k',fontsize='small')
         
         grid[i].set_xlim(-2,3)
         grid[i].set_ylim(-2.5,2.5)
@@ -646,7 +644,7 @@ if 'torque' in vars:
 
     print "\n\n saving ... ",output_dir+"torque_timeseries_midplane.pdf\n\n"
     plt.savefig(output_dir+"torque_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
 
 
 ####################################
@@ -723,4 +721,4 @@ if 'h' in vars:
 
     print "\n\n saving ... ",output_dir+"specmom_timeseries_midplane.pdf \n\n"
     plt.savefig(output_dir+"specmom_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
-    plt.clf()
+    plt.close()
