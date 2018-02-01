@@ -574,12 +574,14 @@ if 'cs' in vars:
     plt.clf()
 
 
-
+###############
+# TORQUE
+###############
 if 'torque' in vars:
     print "   TORQUE   "
     mycm = plt.cm.PiYG
     vmin = -8
-    fig = plt.figure(1,figsize=(8,11))
+    fig = plt.figure(1,figsize=(10,9))
     nrows = 2
     ncols = 3
     grid = ImageGrid(fig, 111,  # similar to subplot(111)
@@ -632,8 +634,8 @@ if 'torque' in vars:
         
         grid[i].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-4,3.5),color='k',fontsize='small')
         
-        grid[i].set_xlim(-3,3)
-        grid[i].set_ylim(-3,3)
+        grid[i].set_xlim(-2,3)
+        grid[i].set_ylim(-2.5,2.5)
         grid[i].set_xticks([-2,0,2])
         grid[i].set_yticks([-2,0,2])
         grid[i].set_xlabel(r"$x'/R_1$")
