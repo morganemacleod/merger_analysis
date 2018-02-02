@@ -599,7 +599,7 @@ if 'torque' in vars:
         d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=True,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     
-        t = 100.#d['Time']
+        t = d['Time']
         
         rcom,vcom = ou.rcom_vcom(orb,t)
         x2,y2,z2 = ou.pos_secondary(orb,t)
