@@ -1,2 +1,6 @@
 Fig 3, 4, 12, 16  orbit_plots.py
 python merger_analysis/orbit_plots.py 0.410103 0.3 --base_dir=/Volumes/DATAVolume/athenaruns/pm_envelope/pole/syncRL/fcorot_series/a206_res24_fc10/ --output_dir=paper_figures/
+
+
+Fig 5,8, 11: timeseries_slices.py
+python merger_analysis/timeseries_slices.py 0.410103 0.3 --base_dir=/Volumes/DATAVolume/athenaruns/pm_envelope/pole/syncRL/fcorot_series/a206_res24_fc10/ --output_dir=paper_figures/

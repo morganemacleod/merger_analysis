@@ -47,8 +47,8 @@ file_list = [full_file_list[-322],
 mylevel=2
 
 #vars = ['density','pressure','entropy', 'torque','cs','h']
-vars = ['h']
-
+#vars = ['h']
+vars = ['density','pressure','entropy', 'torque','cs','h']
 
 ####################################
 
@@ -131,10 +131,10 @@ if 'density' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$y'/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$y'$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
+        cb.set_label_text(r"$\log_{10} \left(\rho \right)$")
 
 
     print "\n\n saving .... " , output_dir+"density_timeseries_midplane.pdf \n\n"
@@ -186,10 +186,10 @@ if 'density' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$z/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$z$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
+        cb.set_label_text(r"$\log_{10}\left( \rho \right)$")
 
 
     print "\n\n saving ... ", output_dir+"density_timeseries_vertical.pdf \n\n"
@@ -255,10 +255,10 @@ if 'pressure' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$y'/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$y'$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ P \ \ [GM_1^2/R_1^4]$")
+        cb.set_label_text(r"$\log_{10}\left(P \right)$")
 
     print "\n\n saving ... ", output_dir+"pressure_timeseries_midplane.pdf\n\n"
     plt.savefig(output_dir+"pressure_timeseries_midplane.pdf",bbox_inches='tight',dpi=300)
@@ -307,10 +307,10 @@ if 'pressure' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$z/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$z$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ P \ \ [GM_1^2/R_1^4]$")
+        cb.set_label_text(r"$\log_{10} \left( P  \right)$")
         
     print "\n\n saving... ",output_dir+"pressure_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"pressure_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
@@ -377,8 +377,8 @@ if 'entropy' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$y'/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$y'$")
         cb = grid.cbar_axes[i].colorbar(im)
         cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
     
@@ -434,8 +434,8 @@ if 'entropy' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$z/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$z$")
         cb = grid.cbar_axes[i].colorbar(im)
         cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
             
@@ -506,10 +506,10 @@ if 'cs' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$y'/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$y'$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ c_s \ \ [(GM_1/R_1)^{1/2}]$")
+        cb.set_label_text(r"$\log_{10} \left( c_s \right)$")
     
 
     print "\n\n saving ... ",output_dir+"soundspeed_timeseries_midplane.pdf \n\n"
@@ -564,10 +564,10 @@ if 'cs' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$z/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$z$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"$\log \ c_s \ \ [(GM_1/R_1)^{1/2}]$")
+        cb.set_label_text(r"$\log_{10} \left( c_s \right)$")
             
     print "\n\n saving ... ",output_dir+"soundspeed_timeseries_vertical.pdf \n\n"
     plt.savefig(output_dir+"soundspeed_timeseries_vertical.pdf",bbox_inches='tight',dpi=300)
@@ -636,10 +636,10 @@ if 'torque' in vars:
         grid[i].set_ylim(-2.5,2.5)
         grid[i].set_xticks([-2,0,2])
         grid[i].set_yticks([-2,0,2])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$y'/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$y'$")
 
-        fig.colorbar(im,cax=grid.cbar_axes[i],label=r'torque density (z) $[GM_1^2/R_1^4]$')
+        fig.colorbar(im,cax=grid.cbar_axes[i],label=r'$\hat z$ torque density')
 
 
     print "\n\n saving ... ",output_dir+"torque_timeseries_midplane.pdf\n\n"
@@ -713,10 +713,10 @@ if 'h' in vars:
         grid[i].set_ylim(-5,5)
         grid[i].set_xticks([-4,0,4])
         grid[i].set_yticks([-4,0,4])
-        grid[i].set_xlabel(r"$x'/R_1$")
-        grid[i].set_ylabel(r"$y'/R_1$")
+        grid[i].set_xlabel(r"$x'$")
+        grid[i].set_ylabel(r"$y'$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"specific angular momentum $\left[ (GM_1 R_1)^{1/2} \right]$")
+        cb.set_label_text(r"specific angular momentum")
     
 
     print "\n\n saving ... ",output_dir+"specmom_timeseries_midplane.pdf \n\n"
