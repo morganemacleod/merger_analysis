@@ -716,7 +716,7 @@ if 'h' in vars:
         grid[i].set_xlabel(r"$x'$")
         grid[i].set_ylabel(r"$y'$")
         cb = grid.cbar_axes[i].colorbar(im)
-        cb.set_label_text(r"specific angular momentum")
+        cb.set_label_text(r"$\hat z$ specific angular momentum")
     
 
     print "\n\n saving ... ",output_dir+"specmom_timeseries_midplane.pdf \n\n"

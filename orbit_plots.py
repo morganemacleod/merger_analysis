@@ -64,7 +64,7 @@ print "t1=",t1
 ####### 
 # ORBITAL PATH FIGS
 #######
-plt.figure(figsize=(5,5))
+plt.figure(figsize=(4,4))
 phi = np.linspace(0,2*np.pi,100)
 plt.plot(orb['x'],orb['y'],'k-',label="$m_2$")
 plt.plot(np.cos(phi),np.sin(phi),'--',color='grey')
@@ -76,11 +76,11 @@ plt.xlabel(r'$x$')
 plt.ylabel(r'$y$')
 plt.xlim(-2.5,2.5)
 plt.ylim(-2.5,2.5)
-plt.legend(loc=0)
+plt.legend(loc='lower right')
 plt.savefig(output_dir+"orbital_path_sim.pdf",bbox_inches='tight')
 plt.clf()
 
-plt.figure(figsize=(5,5))
+plt.figure(figsize=(4,4))
 phi = np.linspace(0,2*np.pi,100)
 plt.plot(orb['x']-orb['xcom'],orb['y']-orb['ycom'],'k-',label="$m_2$")
 plt.plot(-orb['xcom'],-orb['ycom'],'b-',label="$m_1$")
@@ -90,11 +90,11 @@ plt.ylabel(r'$y$')
 plt.axis('equal')
 plt.xlim(-2.5,2.5)
 plt.ylim(-2.5,2.5)
-plt.legend(loc=0)
+plt.legend(loc='upper right')
 plt.savefig(output_dir+"orbital_path_in.pdf",bbox_inches='tight')
 plt.clf()
 
-plt.figure(figsize=(9,4))
+plt.figure(figsize=(7,3.5))
 plt.axhline(1,ls='--',color='grey')
 plt.axhline(0.3,ls='-',color='grey')
 plt.axhline(a_RL(0.3),ls='-',color='SkyBlue')
@@ -104,7 +104,7 @@ plt.xlabel(r'time, $t-t_1$')
 plt.xlim(orb['time'][0]-t1,10)
 plt.annotate(r"$R_1$",(-510,1.03))
 plt.annotate(r"$r_{\rm in}$",(-510,0.33))
-plt.annotate(r"$a_{\rm RL}$",(-20,1.95))
+plt.annotate(r"$a_{\rm RL}$",(-25,1.95))
 plt.savefig(output_dir+"separation_time.pdf",bbox_inches='tight')
 plt.clf()
 
@@ -155,7 +155,7 @@ plt.clf()
 
 
 ### Decay timescale
-plt.figure()
+plt.figure(figsize=(6,5))
 # number of orbits for decay of angular momentum
 Omega = orb['vmag']/orb['sep']
 dadt = np.gradient(orb['sep'])/np.gradient(orb['time'])
@@ -169,7 +169,7 @@ plt.plot(orb['sep'],plot_arr,
 plt.axvline(1,zorder=0,ls='--',color='grey')
 plt.annotate(r"$R_1$",(1.03,5.5))
 
-plt.legend(loc=0)
+plt.legend(loc=0,fontsize=16)
 
 plt.yscale('log')
 plt.xlabel(r'separation')
@@ -193,12 +193,12 @@ orb['t1'] = np.cross(-orb['rcom'],m1*orb['agas1'])[:,2]
 tmin=-30
 select = orb['time']-t1>tmin
 
-plt.figure(figsize=(8,3.5))
+plt.figure(figsize=(7,3.5))
 plt.subplot(121)
 plt.plot(orb[select]['time']-t1,orb[select]['t1'],'--',label=r'$\tau_{\rm grav,1}$',lw=2)
 plt.plot(orb[select]['time']-t1,orb[select]['t2'],':',label=r'$\tau_{\rm grav,2}$',lw=2)
 plt.plot(orb[select]['time']-t1,orb[select]['t1']+orb[select]['t2'],'k-',label='total')
-plt.legend(loc=0,handletextpad=0.5,frameon=True)
+plt.legend(loc=0,handletextpad=0.5,frameon=True,fontsize=16)
 plt.xlabel("time, $t-t_1$")
 plt.ylabel(r'torque')
 plt.grid()

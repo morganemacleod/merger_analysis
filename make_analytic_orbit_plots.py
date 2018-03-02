@@ -134,7 +134,7 @@ yps = convolve(yp,Box1DKernel(100),boundary='extend')
 
 
 # MASS TRANSFER
-plt.figure(figsize=(8,3.5))
+plt.figure(figsize=(7,3.5))
 
 select = (sol_acc['m1']>0.5) & (sol_acc['a']>0.6)
 
@@ -150,7 +150,7 @@ plt.ylim(1.e-6,1.e-1)
 plt.grid()
 plt.ylabel(r"$|\dot M_{\rm donor}|$")
 plt.xlabel("time, $t-t_1$")
-plt.legend(loc=0,frameon=True)
+plt.legend(loc=0,frameon=True,fontsize=16)
 
 
 plt.subplot(122)
