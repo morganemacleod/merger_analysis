@@ -181,8 +181,12 @@ for i,myfile in enumerate(file_list):
     
     x2rot = (x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot)
     y2rot = (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot)
+    x1rot = (-rcom[0])*np.cos(theta_rot)-(-rcom[1])*np.sin(theta_rot)
+    y1rot = (-rcom[0])*np.sin(theta_rot)+(-rcom[1])*np.cos(theta_rot)
     grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
-        
+    grid[ind].plot(x1rot,y1rot,'b*',markersize=3)
+    grid[ind].plot(0,0,'kx',markersize=3)
+    
     grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-0.3,1.2),color='w',fontsize='large')
         
         
@@ -203,7 +207,7 @@ for i,myfile in enumerate(file_list):
     xl= np.linspace(-0.5,2.5,301)
     yl = np.linspace(-1.5,1.5,301)
     xx,yy = np.meshgrid(xl,yl)
-    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C0',linestyles='-',lw=0.5)
+    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',linewidths=0.5)
 
 
         
@@ -223,6 +227,8 @@ for i,myfile in enumerate(file_list):
         vmin=-8,vmax=0,rasterized=True)
     
     grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
+    grid[ind].plot(x1rot,y1rot,'b*',markersize=3)
+    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',linewidths=0.5)
     
     grid[ind].set_xlim(-0.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
@@ -244,6 +250,7 @@ for i,myfile in enumerate(file_list):
         vmin=-0.5,vmax=5.5,rasterized=True)
     
     grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
+    grid[ind].plot(x1rot,y1rot,'b*',markersize=3)
     
     skip = 16
     grid[ind].quiver(xrot[::skip,::skip],
@@ -333,7 +340,8 @@ for i,myfile in enumerate(file_list):
     
     x2rot = (x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot)
     y2rot = (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot)
- 
+    x1rot = (-rcom[0])*np.cos(theta_rot)-(-rcom[1])*np.sin(theta_rot)
+    y1rot = (-rcom[0])*np.sin(theta_rot)+(-rcom[1])*np.cos(theta_rot) 
 
 
 
@@ -350,7 +358,7 @@ for i,myfile in enumerate(file_list):
         vmin=-0.5,vmax=5.5,rasterized=True)
     
     grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
-        
+    grid[ind].plot(x1rot,y1rot,'b*',markersize=3)    
     
     
     # OVERPLOT THE ROCHE LOBE
@@ -359,17 +367,17 @@ for i,myfile in enumerate(file_list):
 
     # PLOT THE CONTOUR
     xL,phiL = b.get_xL_phiL()
-    xl= np.linspace(-3,3,201)
-    yl = np.linspace(-3,3,201)
+    xl= np.linspace(-3,3,301)
+    yl = np.linspace(-3,3,301)
     xx,yy = np.meshgrid(xl,yl)
     grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',lw=1)
     
     
     
     # CONSTRUCT INITIAL VALUES
-    width = 0.03
-    npoints = 30
-    x0 = xL[1] + np.random.normal(0,width/3,npoints) + width
+    width = 0.06
+    npoints = 20
+    x0 = xL[1] + np.random.normal(0,width/2,npoints) + width
     y0 = 0 + np.random.normal(0,width,npoints)
     z0 = np.zeros_like(y0)
 
@@ -402,7 +410,7 @@ for i,myfile in enumerate(file_list):
     for j,init in enumerate(initialvalues):
         sol = binary_balistic(init,tlim=10,ntimes=1001)
         # PLOT THE SOLUTION
-        grid[ind].plot(sol['x'],sol['y'],'-',lw=1,color='cyan')
+        grid[ind].plot(sol['x'],sol['y'],'-',lw=1,color='skyblue')
 
 
 
@@ -429,12 +437,12 @@ plt.clf()
 #  OMEGA
 #######################
 
-fcorotation=0.95
+fcorotation=1.0
 
 sma0 = np.interp(0,orb['time'],orb['sep'])
 Omega0 = fcorotation*np.interp(0,orb['time'],orb['vmag'])/sma0 
 
-fig = plt.figure(1,figsize=(11,10))
+fig = plt.figure(1,figsize=(7,6))
 nrows = 2
 ncols = 2
 grid = ImageGrid(fig, 111,  # similar to subplot(111)
@@ -478,6 +486,8 @@ for i,myfile in enumerate(file_list):
     
     x2rot = (x2-rcom[0])*np.cos(theta_rot)-(y2-rcom[1])*np.sin(theta_rot)
     y2rot = (x2-rcom[0])*np.sin(theta_rot)+(y2-rcom[1])*np.cos(theta_rot)
+    x1rot = (-rcom[0])*np.cos(theta_rot)-(-rcom[1])*np.sin(theta_rot)
+    y1rot = (-rcom[0])*np.sin(theta_rot)+(-rcom[1])*np.cos(theta_rot)
  
     OmegaPlot = d['vel3'][:,len(d['x2v'])/2,:]/d['gx1v'][:,len(d['x2v'])/2,:] - Omega
 
@@ -493,8 +503,6 @@ for i,myfile in enumerate(file_list):
         ou.get_plot_array_midplane( OmegaPlot ),
         cmap=plt.cm.PuOr,
         vmin=-1,vmax=1,rasterized=True)
-    
-    grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
         
 
     grid[ind].contour(
@@ -502,8 +510,12 @@ for i,myfile in enumerate(file_list):
         ou.get_plot_array_midplane(yrot),
         ou.get_plot_array_midplane( np.log10(d['rho'][:,len(d['x2v'])/2,:]) ),
         cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17))
+
+   
+    grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
+    grid[ind].plot(x1rot,y1rot,'b*',markersize=3)
     
-    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.9,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
+    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.5,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
     grid[ind].set_xlim(-1.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
     grid[ind].set_xlabel(r"$x'/R_1$")
@@ -516,7 +528,7 @@ plt.clf()
 
 
 
-fig = plt.figure(1,figsize=(11,10))
+fig = plt.figure(1,figsize=(7,6))
 nrows = 2
 ncols = 2
 grid = ImageGrid(fig, 111,  # similar to subplot(111)
@@ -585,13 +597,13 @@ for i,myfile in enumerate(file_list):
         ou.get_plot_array_midplane( np.log10(d['rho'][:,len(d['x2v'])/2,:]) ),
         cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17))
     
-    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.9,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
+    grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.5,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
     grid[ind].set_xlim(-1.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
     grid[ind].set_xlabel(r"$x'/R_1$")
     grid[ind].set_ylabel(r"$y'/R_1$")
     cb = grid.cbar_axes[ind].colorbar(im)
-    cb.set_label_text(r"$\Omega-\Omega_0$")
+    cb.set_label_text(r"$\Omega-\Omega_{\rm orb,0}$")
     
 plt.savefig(output_dir+"omega_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
 plt.clf()

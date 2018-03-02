@@ -46,8 +46,8 @@ file_list = [full_file_list[-322],
 
 mylevel=2
 
-#vars = ['density','pressure','entropy', 'torque','cs']
-vars = ['torque']
+#vars = ['density','pressure','entropy', 'torque','cs','h']
+vars = ['h']
 
 
 ####################################
@@ -655,9 +655,9 @@ if 'h' in vars:
 
     print "   SPECIFIC ANGULAR MOMENTUM     "
     
-    vmax = 3.25
-    vmin = -0.25
-    mycm = plt.cm.viridis
+    vmax = 3.0
+    vmin = 0.0
+    mycm = plt.cm.YlGnBu_r
 
     
     fig = plt.figure(1,figsize=(10,9))
