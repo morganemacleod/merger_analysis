@@ -144,7 +144,7 @@ plt.plot(np.interp(hst['time'],orb['time'],orb['sep']),Omega_env/Omega[0],'--',l
 plt.plot(orb['sep'],(orb['sep']/orb['sep'][0])**-1.5,':',lw=2,color='grey',label=r'$a^{-3/2}$'  )
 
 plt.axvline(1,zorder=0,ls='--',color='grey')
-plt.annotate(r"$R_1$",(1.03,10))
+plt.annotate(r"$R_1$",(1.03,5.5))
 
 #plt.xlabel(r'time $[R_1^3/GM_1]$')
 plt.ylabel(r"$\Omega/\Omega_{\rm orb,0}$")
