@@ -121,7 +121,7 @@ im=grid[0].pcolormesh(x,z,np.log10(rho),
 
 
 cb=grid.cbar_axes[0].colorbar(im)
-cb.set_label_text(r'$\log_10 \left( \rho \right)$')
+cb.set_label_text(r'$\log_{10} \left( \rho \right)$')
 
 
 grid[0].set_xlabel(r"$x$")
