@@ -88,7 +88,7 @@ base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/pole/syncRL/fcorot_series
 
 output_dir = "paper_figures/"
 
-m1 = 0.631686
+m1 = 0.410103
 m2 = 0.3
 G=1
 
@@ -140,7 +140,7 @@ for i,myfile in enumerate(file_list):
     print i, myfile 
         
     # read the data
-    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
+    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=False,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     t = d['Time']
     print "t=",t
@@ -192,10 +192,10 @@ for i,myfile in enumerate(file_list):
         
     grid[ind].set_xlim(-0.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
-    grid[ind].set_xlabel(r"$x'/R_1$")
-    grid[ind].set_ylabel(r"$y'/R_1$")
+    grid[ind].set_xlabel(r"$x'$")
+    grid[ind].set_ylabel(r"$y'$")
     cb = grid.cbar_axes[ind].colorbar(im)
-    cb.set_label_text(r"$\log \ \rho \ \ [M_1/R_1^3]$")
+    cb.set_label_text(r"$\log_{10} \left( \rho \right)$")
         
         
     # OVERPLOT THE ROCHE LOBE
@@ -232,10 +232,10 @@ for i,myfile in enumerate(file_list):
     
     grid[ind].set_xlim(-0.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
-    grid[ind].set_xlabel(r"$x'/R_1$")
-    grid[ind].set_ylabel(r"$y'/R_1$")
+    grid[ind].set_xlabel(r"$x'$")
+    grid[ind].set_ylabel(r"$y'$")
     cb = grid.cbar_axes[ind].colorbar(im)
-    cb.set_label_text(r"$\log \ P \ \ [GM_1^2/R_1^4]$")
+    cb.set_label_text(r"$\log_{10} \left( P \right)$")
         
         
     ##########
@@ -263,8 +263,8 @@ for i,myfile in enumerate(file_list):
         
     grid[ind].set_xlim(-0.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
-    grid[ind].set_xlabel(r"$x'/R_1$")
-    grid[ind].set_ylabel(r"$y'/R_1$")
+    grid[ind].set_xlabel(r"$x'$")
+    grid[ind].set_ylabel(r"$y'$")
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
     
@@ -311,7 +311,7 @@ for i,myfile in enumerate(file_list):
     print i, myfile 
         
     # read the data
-    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
+    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=False,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     t = d['Time']
         
@@ -418,8 +418,8 @@ for i,myfile in enumerate(file_list):
     grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.9,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
     grid[ind].set_xlim(-0.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
-    grid[ind].set_xlabel(r"$x'/R_1$")
-    grid[ind].set_ylabel(r"$y'/R_1$")
+    grid[ind].set_xlabel(r"$x'$")
+    grid[ind].set_ylabel(r"$y'$")
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
     
@@ -457,7 +457,7 @@ for i,myfile in enumerate(file_list):
     print i, myfile 
         
     # read the data
-    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
+    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=False,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     t = d['Time']
         
@@ -518,8 +518,8 @@ for i,myfile in enumerate(file_list):
     grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.5,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
     grid[ind].set_xlim(-1.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
-    grid[ind].set_xlabel(r"$x'/R_1$")
-    grid[ind].set_ylabel(r"$y'/R_1$")
+    grid[ind].set_xlabel(r"$x'$")
+    grid[ind].set_ylabel(r"$y'$")
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\Omega-\Omega_{\rm orb}$")
     
@@ -543,7 +543,7 @@ for i,myfile in enumerate(file_list):
     print i, myfile 
         
     # read the data
-    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.1,level=mylevel,get_cartesian=True,get_torque=False,
+    d = ou.read_data(myfile,orb,m1,m2,G=1,rsoft2=0.05,level=mylevel,get_cartesian=True,get_torque=False,
                          x1_max=7.5,x2_min=x2slicevalue,x2_max=x2slicevalue)
     t = d['Time']
         
@@ -600,8 +600,8 @@ for i,myfile in enumerate(file_list):
     grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.5,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
     grid[ind].set_xlim(-1.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
-    grid[ind].set_xlabel(r"$x'/R_1$")
-    grid[ind].set_ylabel(r"$y'/R_1$")
+    grid[ind].set_xlabel(r"$x'$")
+    grid[ind].set_ylabel(r"$y'$")
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\Omega-\Omega_{\rm orb,0}$")
     

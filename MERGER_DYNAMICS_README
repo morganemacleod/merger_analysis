@@ -7,3 +7,11 @@ python merger_analysis/timeseries_slices.py 0.410103 0.3 --base_dir=/Volumes/DAT
 
 
 Fig 7, 9, 10, 19: make_analytic_orbit_plots.py
+
+Fig 13: torque2_radii_plot.py
+
+Fig 14,15, 17: secondary_zoom_ballistic.py
+
+Fig 18, 20, 21(b), 22-25: convergence_plots.py
+
+Fig 21(a): slice_HSE_oblate.py

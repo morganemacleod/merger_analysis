@@ -90,15 +90,15 @@ grid[1].contour(x,z,rho,
 
 
 cb=grid.cbar_axes[1].colorbar(im)
-cb.set_label_text(r'Radial Velocity $[(G M_1 / R_1)^{1/2}]$')
+cb.set_label_text(r'radial velocity')
 
 grid[1].axis('equal')
 grid[1].set_xlim(-2,2)
 grid[1].set_ylim(-2,2)
 
 
-grid[1].set_xlabel(r"$x/R_1$")
-grid[1].set_ylabel(r"$z/R_1$")
+grid[1].set_xlabel(r"$x$")
+grid[1].set_ylabel(r"$z$")
 
 #plt.savefig(output_dir+"hse_3D_vel.pdf",dpi=300,bbox_inches='tight')
 #plt.clf()
@@ -121,11 +121,11 @@ im=grid[0].pcolormesh(x,z,np.log10(rho),
 
 
 cb=grid.cbar_axes[0].colorbar(im)
-cb.set_label_text(r'$\log \ \rho \ \ [M_1 / R_1^3]$')
+cb.set_label_text(r'$\log_10 \left( \rho \right)$')
 
 
-grid[0].set_xlabel(r"$x/R_1$")
-grid[0].set_ylabel(r"$z/R_1$")
+grid[0].set_xlabel(r"$x$")
+grid[0].set_ylabel(r"$z$")
 
 grid[0].axis('equal')
 grid[0].set_xlim(-2,2)
