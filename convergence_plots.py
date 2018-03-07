@@ -97,7 +97,7 @@ for i,fn in enumerate(files):
     plt.xlim(rmin,rmax)
     plt.ylabel(r'$v_{\phi}$')
     plt.grid()
-    plt.xlabel(r'$r/R_1$')
+    plt.xlabel(r'radius')
     
     
 # NOW THE ZOOM
