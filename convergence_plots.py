@@ -383,9 +383,9 @@ files = ["pm_trackfile_a206_rin03_r005_n24_fc0.dat",
          "pm_trackfile_a206_rin03_r005_n24_fc10.dat"
          ]
 
-labels = [r"$\Omega_{\rm env}=0$",
-          r'$\Omega_{\rm env}=0.5 \Omega_{\rm orb,0}$',
-          r'$\Omega_{\rm env}= \Omega_{\rm orb,0}$']
+labels = [r"$\Omega_{\rm env,0}=0$",
+          r'$\Omega_{\rm env,0}=0.5 \Omega_{\rm orb,0}$',
+          r'$\Omega_{\rm env,0}= \Omega_{\rm orb,0}$']
 
 plt.figure()
 plt.axhline(2.06,ls='-',lw=1,color='SkyBlue',zorder=0)
