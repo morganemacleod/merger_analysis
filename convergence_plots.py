@@ -191,7 +191,7 @@ def read_and_plot(fn,thslice,phslice,label,
     plt.xlim(rmin,rmax)
     plt.ylabel(r'$v_{\phi}$')
     plt.grid()
-    plt.xlabel(r'$r$')
+    plt.xlabel(r'radius')
     
 # GET THE SLICE OF CHOICE
 def get_thslice_phislice(fn,thval,phval,level=2):
@@ -240,7 +240,7 @@ def read_and_plot_phiavg(fn,thslice,phslice,label,
     plt.xlim(rmin,rmax)
     plt.ylabel(r'$v_{\phi}$')
     plt.grid()
-    plt.xlabel(r'$r$')
+    plt.xlabel(r'radius')
 
 
 ### MAKE THE PLOT
