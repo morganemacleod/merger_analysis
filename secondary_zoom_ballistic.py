@@ -207,7 +207,7 @@ for i,myfile in enumerate(file_list):
     xl= np.linspace(-0.5,2.5,301)
     yl = np.linspace(-1.5,1.5,301)
     xx,yy = np.meshgrid(xl,yl)
-    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',linewidths=0.5)
+    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',linewidths=0.5,rasterized=True)
 
 
         
@@ -228,7 +228,7 @@ for i,myfile in enumerate(file_list):
     
     grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
     grid[ind].plot(x1rot,y1rot,'b*',markersize=3)
-    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',linewidths=0.5)
+    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',linewidths=0.5,rasterized=True)
     
     grid[ind].set_xlim(-0.5,2.5)
     grid[ind].set_ylim(-1.5,1.5)
@@ -268,7 +268,7 @@ for i,myfile in enumerate(file_list):
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
     
-plt.savefig(output_dir+"flow_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
+plt.savefig(output_dir+"flow_zoom_secondary.pdf",bbox_inches='tight',dpi=150)
 plt.clf()
 
 
@@ -370,7 +370,7 @@ for i,myfile in enumerate(file_list):
     xl= np.linspace(-3,3,301)
     yl = np.linspace(-3,3,301)
     xx,yy = np.meshgrid(xl,yl)
-    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',lw=1)
+    grid[ind].contour(xx,yy,phi(xx,yy,0),levels=np.sort(phiL),colors='C4',linestyles='-',lw=1,rasterized=True)
     
     
     
@@ -410,7 +410,7 @@ for i,myfile in enumerate(file_list):
     for j,init in enumerate(initialvalues):
         sol = binary_balistic(init,tlim=10,ntimes=1001)
         # PLOT THE SOLUTION
-        grid[ind].plot(sol['x'],sol['y'],'-',lw=1,color='skyblue')
+        grid[ind].plot(sol['x'],sol['y'],'-',lw=1,color='skyblue',rasterized=True)
 
 
 
@@ -423,7 +423,7 @@ for i,myfile in enumerate(file_list):
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\ln \left(P/\rho^\gamma \right)$")
     
-plt.savefig(output_dir+"ballistic_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
+plt.savefig(output_dir+"ballistic_zoom_secondary.pdf",bbox_inches='tight',dpi=150)
 plt.clf()
 
 
@@ -509,7 +509,7 @@ for i,myfile in enumerate(file_list):
         ou.get_plot_array_midplane(xrot),
         ou.get_plot_array_midplane(yrot),
         ou.get_plot_array_midplane( np.log10(d['rho'][:,len(d['x2v'])/2,:]) ),
-        cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17))
+        cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17),rasterized=True)
 
    
     grid[ind].plot(x2rot,y2rot,'w*',markersize=3)
@@ -523,7 +523,7 @@ for i,myfile in enumerate(file_list):
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\Omega-\Omega_{\rm orb}$")
     
-plt.savefig(output_dir+"omega_inst_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
+plt.savefig(output_dir+"omega_inst_zoom_secondary.pdf",bbox_inches='tight',dpi=150)
 plt.clf()
 
 
@@ -595,7 +595,7 @@ for i,myfile in enumerate(file_list):
         ou.get_plot_array_midplane(xrot),
         ou.get_plot_array_midplane(yrot),
         ou.get_plot_array_midplane( np.log10(d['rho'][:,len(d['x2v'])/2,:]) ),
-        cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17))
+        cmap=plt.cm.bone_r,linestyles='-',levels=np.linspace(-8,0,17),rasterized=True)
     
     grid[ind].annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.5,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
     grid[ind].set_xlim(-1.5,2.5)
@@ -605,5 +605,5 @@ for i,myfile in enumerate(file_list):
     cb = grid.cbar_axes[ind].colorbar(im)
     cb.set_label_text(r"$\Omega-\Omega_{\rm orb,0}$")
     
-plt.savefig(output_dir+"omega_zoom_secondary.pdf",bbox_inches='tight',dpi=300)
+plt.savefig(output_dir+"omega_zoom_secondary.pdf",bbox_inches='tight',dpi=150)
 plt.clf()
