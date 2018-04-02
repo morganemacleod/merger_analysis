@@ -54,7 +54,7 @@ def derivs(vec,t,mode):
     if mode=='accretor':
         gamma = 2*m1/m2  # pols
     if mode=='l2':
-        gamma = (m1+m2)**2/(m1*m2) * np.sqrt(1.2)  # pribula 
+        gamma = (m1+m2)**2/(m1*m2) * 1.2**2  # pribula 
     
     # derivatives
     dm1dt = mdot_donor(a,m1,m2,r1)
@@ -175,10 +175,11 @@ plt.close()
 plt.figure(figsize=(6,6))
 
 m1 = 1.0 - np.cumsum(md['mdot']*np.gradient(md['time']))
+print m1
 m2 = 0.3
 Mtot = m1+m2
 mu = m1*m2/Mtot
-Lbin = mu*np.sqrt(Mtot**3 * md['sep'])
+Lbin = mu*np.sqrt(Mtot * md['sep'])
 
 MtotoLbin = np.interp(xp,np.flipud(md['sep']),np.flipud(Mtot/Lbin) )
 
@@ -189,26 +190,26 @@ plt.subplot(211)
 plt.plot(xp,yp,lw=0.5,color='grey')
 plt.plot(xp,yps,lw=1.5)
 plt.plot(md['sep'],m1/m2*(Lbin/Mtot),linestyle='--',color='grey')
-plt.plot(md['sep'],(m1+m2)**2/(m1*m2) * np.sqrt(1.2)*(Lbin/Mtot),linestyle='-.',color='grey')
+plt.plot(md['sep'],(m1+m2)**2/(m1*m2) * 1.2**2 *(Lbin/Mtot),linestyle='-.',color='grey')
 plt.xticks(visible=False)
 plt.xlim(1,)
 plt.ylim(0.25,2.75)
 plt.ylabel(r"$h_{\rm loss}$")
 plt.annotate(r"$h_{\rm accretor}$",(1.4,0.75))
-plt.annotate(r"$h_{\rm L_2}$",(1.6,2.11))
+plt.annotate(r"$h_{\rm L_2}$",(1.6,2.2))
 
 
 plt.subplot(212)
 plt.plot(xp,gamma,lw=0.5,color='grey')
 plt.plot(xp,gammas,lw=1.5)
 plt.plot(md['sep'],m1/m2,linestyle='--',color='grey')
-plt.plot(md['sep'],(m1+m2)**2/(m1*m2) * np.sqrt(1.2),linestyle='-.',color='grey')
+plt.plot(md['sep'],(m1+m2)**2/(m1*m2) * 1.2**2,linestyle='-.',color='grey')
 plt.xlabel(r'separation')
 plt.xlim(1,)
-plt.ylim(2.5,7.5)
+plt.ylim(2.5,9.5)
 plt.ylabel(r"$\gamma_{\rm loss}$")
 plt.annotate(r"$\gamma_{\rm accretor}$",(1.2,3.4))
-plt.annotate(r"$\gamma_{\rm L_2}$",(1.6,6.3))
+plt.annotate(r"$\gamma_{\rm L_2}$",(1.6,8.25))
 
 plt.subplots_adjust(hspace=0.0)
 
