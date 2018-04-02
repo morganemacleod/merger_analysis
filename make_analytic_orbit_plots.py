@@ -195,7 +195,7 @@ plt.xticks(visible=False)
 plt.xlim(1,)
 plt.ylim(0.25,2.75)
 plt.ylabel(r"$h_{\rm loss}$")
-plt.annotate(r"$h_{\rm accretor}$",(1.4,0.75))
+plt.annotate(r"$h_{\rm accretor}$",(1.4,0.95))
 plt.annotate(r"$h_{\rm L_2}$",(1.6,2.2))
 
 
