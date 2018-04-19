@@ -119,7 +119,8 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
              x1_min=None,x1_max=None,
              x2_min=None,x2_max=None,
              x3_min=None,x3_max=None,
-             profile_file="hse_profile.dat"):
+             profile_file="hse_profile.dat",
+             gamma=5./3.  ):
     """ Read spherical data and reconstruct cartesian mesh for analysis/plotting """
   
     
@@ -237,13 +238,14 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
         #energy
         dist2 = np.sqrt( (d['x']-x2)**2 + (d['y']-y2)**2 + (d['z']-z2)**2 )
         M1r = np.interp(d['gx1v'],hse_prof['r'],hse_prof['m'])
-        # should update with the real potential 
-        d['epot'] = -G*M1r*d['rho']/d['gx1v'] - G*m2*d['rho']*pspline(dist2,rsoft2)
+        # should update with the real potential
+        d['epotg'] = -G*(M1r-m1)*d['rho']/d['gx1v']
+        d['epotp'] = -G*m1*d['rho']/d['gx1v'] - G*m2*d['rho']*pspline(dist2,rsoft2)
         d['ek'] = 0.5*d['rho']*((d['vx']-vcom[0])**2 +
                            (d['vy']-vcom[1])**2 + 
                            (d['vz']-vcom[2])**2)
-        d['ei'] = d['press']/(5/3.-1)
-        d['etot'] = d['epot'] + d['ei'] + d['ek']
+        d['ei'] = d['press']/(gamma-1)
+        d['etot'] = d['epotg'] + d['epotp'] + d['ei'] + d['ek']
         
         del hse_prof,dist2,M1r
     
