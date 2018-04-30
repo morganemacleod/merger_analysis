@@ -17,18 +17,30 @@ filelist = glob(base_dir+"HSE.out1.005[0-9][0,5].athdf")
 #filelist = filelist[-41:-1]
 print filelist
 
-names = ['time','EK1','EK2','EPp','EPg','EPpg','EKg','EIg','Egas','Etot']
+names = ['time','EK1','EK2','EPp','EPg','EPpg','EKg','EIg','Egas','Etot','EPg_sg','Etot_sg']
 ############################
 
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 #print "ORB: ... ", orb.colnames
+
+
+
+
+def epotSG(d):
+   """ return the gas self-gravitational potential """
+    dmr = np.sum(d['rho']*d['dvol'],axis=(0,1))
+    mr = np.cumsum(dmr)
+    return np.sum(-(mr)*dmr/d['x1v'])
+
+
+
 
 data = []
 
 for i,myfile in enumerate(filelist):
     
     d=ou.read_data(myfile,orb,m1,m2,rsoft2=0.05,level=0,get_cartesian=True,get_torque=False,get_energy=True,
-                   profile_file=base_dir+"hse_profile.dat",x1_max=1.0)
+                   profile_file=base_dir+"hse_profile.dat",x1_max=30)
     
     t = d['Time']
     
@@ -50,6 +62,9 @@ for i,myfile in enumerate(filelist):
     EKg = np.sum(d['ek']*d['dvol'])
     EIg = np.sum(d['ei']*d['dvol'])
     Egas = np.sum(d['etot']*d['dvol'])
+
+    EPg_sg = epotSG(d)
+    
     
 
     data_entry = [t]
@@ -62,6 +77,8 @@ for i,myfile in enumerate(filelist):
     data_entry.append(EIg)
     data_entry.append(Egas)
     data_entry.append(Egas+EK1+EK2+EPp)
+    data_entry.append(EPg_sg)
+    data_entry.append(ePg_sg + EPpg + EKg + EIg + EK1 + EK2 + EPp)
     
     data.append(data_entry)
 
