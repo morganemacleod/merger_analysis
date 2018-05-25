@@ -28,9 +28,9 @@ orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
 
 def epotSG(d):
    """ return the gas self-gravitational potential """
-    dmr = np.sum(d['rho']*d['dvol'],axis=(0,1))
-    mr = np.cumsum(dmr)
-    return np.sum(-(mr)*dmr/d['x1v'])
+   dmr = np.sum(d['rho']*d['dvol'],axis=(0,1))
+   mr = np.cumsum(dmr)
+   return np.sum(-(mr)*dmr/d['x1v'])
 
 
 
@@ -78,7 +78,7 @@ for i,myfile in enumerate(filelist):
     data_entry.append(Egas)
     data_entry.append(Egas+EK1+EK2+EPp)
     data_entry.append(EPg_sg)
-    data_entry.append(ePg_sg + EPpg + EKg + EIg + EK1 + EK2 + EPp)
+    data_entry.append(EPg_sg + EPpg + EKg + EIg + EK1 + EK2 + EPp)
     
     data.append(data_entry)
 
