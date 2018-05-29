@@ -48,7 +48,11 @@ print file_list
 
 mylevel=0
 
-vars = ['density','mdot','energy']
+vars = [#'velocity',
+        'density',
+        'mdot',
+        'energy',
+        'temperature']
 
 ####################################
 
@@ -555,4 +559,84 @@ for i,myfile in enumerate(file_list):
         cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
         fig.colorbar(im, cax=cbar_ax,label="mass per zone")
         plt.savefig(output_dir+"energy_dist_split_log_"+str(i)+".png",bbox_inches='tight',dpi=150)
+        plt.close()
+
+
+    if 'temperature' in vars:
+        fig=plt.figure(figsize=(5.5,12))
+
+        nbins=60
+        myrange = [[0,1.5],[-3.5,0]]
+        ylabel = r"$\log_{10}(P/\rho)$"
+        
+        midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
+        intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
+                        (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
+        pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
+        
+        selections = [midplane,pole]
+        
+        radius_com = np.sqrt(xrot**2 + yrot**2 +d['z']**2)
+        histx =  np.log10(radius_com).flatten()  
+        histy = np.log10(d['press']/d['rho']).flatten()
+        dm = (d['dvol']*d['rho']).flatten()
+        
+
+        
+        ### MIDPLANE
+        plt.subplot(311)
+        plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+
+
+        #plt.grid(color=lc,ls=':')
+        add_grids()
+        
+        plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
+                     fontsize='small',color='k')
+        
+        plt.ylabel(ylabel)
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        ### INTERMEDIATE
+        plt.subplot(312)
+        plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+        
+        
+        add_grids()
+        plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.ylabel(ylabel)
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+
+        ### POLE
+        plt.subplot(313)
+        c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
+                              bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                              range=myrange,
+                              cmap=mycm)
+
+
+
+        add_grids()
+        plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
+
+        plt.xlabel(r"$\log_{10 } ( r_{\rm com}/R_1 )$")
+        plt.ylabel(ylabel)
+
+
+        fig.subplots_adjust(hspace=0.0, right=0.9)
+        cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
+        fig.colorbar(im, cax=cbar_ax,label="mass per zone")
+        plt.savefig(output_dir+"temperature_dist_split_log_"+str(i)+".png",bbox_inches='tight',dpi=150)
         plt.close()
