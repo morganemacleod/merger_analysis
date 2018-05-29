@@ -48,7 +48,19 @@ print file_list
 
 mylevel=0
 
+vars = ['density','mdot','energy']
+
 ####################################
+
+def add_grids():
+    for i in range(-2,5):
+        #plt.plot(np.log10(rl),np.log10( rl**0 )-2*i,":",lw=1.5,color=lc,alpha=0.2)
+        plt.plot(np.log10(rl),np.log10( rl**-2 )-2*i,":",lw=1.5,color=lc,alpha=0.2)
+        plt.plot(np.log10(rl),np.log10( rl**-4 )-2*i,":",lw=1.5,color=lc,alpha=0.2)
+
+
+    plt.grid(color=lc,ls=':',alpha=0.2)
+    return
 
 
 orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
@@ -100,209 +112,447 @@ for i,myfile in enumerate(file_list):
     d['vr_com'] = np.sqrt(vxrot**2 + vyrot**2 +d['vz']**2)
 
 
-
-    # VELOCITY PLOTS
     mycm= sns.cubehelix_palette(start=0.9, rot=-1,light=0.95,dark=.1,as_cmap=True)
     rl = np.linspace(1,30,100)
     lc = 'C4'
-
-
-    ######################
-    #   Velocity
-    ######################
-
-    histx =  np.sqrt(xrot**2 + yrot**2 +d['z']**2).flatten()  
-    histy = d['vr_com'].flatten()
-    dm = (d['dvol']*d['rho']).flatten()
-    
-    plt.hist2d(histx,histy,weights=dm,
-               bins=60,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
-               range=[[1,30],[0,1]],
-    cmap=mycm)
-    plt.colorbar(label="mass per zone",ticks=10**np.linspace(-12,-2,11))
-    
-    plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
-    plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
-    
-    plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
-                 fontsize='small',color='k',backgroundcolor='white')
-
-    plt.xlabel(r"$ r_{\rm com}/R_1 $")
-    plt.ylabel(r"$v_{r,com}$")
-    plt.savefig(output_dir+"velocity_dist_full_"+str(i)+".png",bbox_inches='tight',dpi=150)
-    plt.close()
-
-
-
-    ## THREE PANEL LINEAR ##
-    fig=plt.figure(figsize=(5.5,12))
-
-    nbins=60
-
-    midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
-    intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
-                    (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
-    pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
-
-    
-    histx =  np.sqrt(xrot**2 + yrot**2 +d['z']**2).flatten()  
-    histy = d['vr_com'].flatten()
-    dm = (d['dvol']*d['rho']).flatten()
-
-
-
-    ### MIDPLANE
-    plt.subplot(311)
-    plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
-               bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
-               range=[[1,30],[0,1]],
-               cmap=mycm)
     
 
-    
-    plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
-    plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
-    
-    plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
-    
-    plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
-                 fontsize='small',color='k')
+    # VELOCITY PLOTS
+    if 'velocity' in vars:
+ 
 
-    #plt.xlabel(r"$ r_{\rm com}/R_1 $")
-    plt.ylabel(r"$v_{r,com}$")
-    plt.xticks(visible=False)
-    plt.yticks([0.2,0.4,0.6,0.8,1.0])
+        ######################
+        #   Velocity
+        ######################
+        
+        histx =  np.sqrt(xrot**2 + yrot**2 +d['z']**2).flatten()  
+        histy = d['vr_com'].flatten()
+        dm = (d['dvol']*d['rho']).flatten()
+        
+        plt.hist2d(histx,histy,weights=dm,
+                   bins=60,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=[[1,30],[0,1]],
+                   cmap=mycm)
+        plt.colorbar(label="mass per zone",ticks=10**np.linspace(-12,-2,11))
+        
+        plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
+        plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
+        
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
+                     fontsize='small',color='k',backgroundcolor='white')
+        
+        plt.xlabel(r"$ r_{\rm com}/R_1 $")
+        plt.ylabel(r"$v_{r,com}$")
+        plt.savefig(output_dir+"velocity_dist_full_"+str(i)+".png",bbox_inches='tight',dpi=150)
+        plt.close()
+        
 
-    ### INTERMEDIATE
-    plt.subplot(312)
-    plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
-               bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
-               range=[[1,30],[0,1]],
-               cmap=mycm)
-    
-    plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
-    plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
-    
-    plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
-    
-    #plt.xlabel(r"$ r_{\rm com}/R_1 $")
-    plt.ylabel(r"$v_{r,com}$")
-    plt.xticks(visible=False)
-    plt.yticks([0.2,0.4,0.6,0.8,1.0])
-    
-
-    ### POLE
-    plt.subplot(313)
-    c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
-                          bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
-                          range=[[1,30],[0,1]],
-                          cmap=mycm)
-
-
-
-    plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
-    plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
-    
-    plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
-    
-    plt.xlabel(r"$ r_{\rm com}/R_1 $")
-    plt.ylabel(r"$v_{r,com}$")
-    
-
-    fig.subplots_adjust(hspace=0.0, right=0.9)
-    cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
-    fig.colorbar(im, cax=cbar_ax,label="mass per zone")
-
-    plt.savefig(output_dir+"velocity_dist_split_linear_"+str(i)+".png",bbox_inches='tight',dpi=150)
-    plt.close()
+        
+        ## THREE PANEL LINEAR ##
+        fig=plt.figure(figsize=(5.5,12))
+        
+        nbins=60
+        
+        midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
+        intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
+                        (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
+        pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
+        
+        
+        histx =  np.sqrt(xrot**2 + yrot**2 +d['z']**2).flatten()  
+        histy = d['vr_com'].flatten()
+        dm = (d['dvol']*d['rho']).flatten()
+        
 
 
+        ### MIDPLANE
+        plt.subplot(311)
+        plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=[[1,30],[0,1]],
+                   cmap=mycm)
+    
+
+        
+        plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
+        plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
+        
+        plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
+                     fontsize='small',color='k')
+        
+        #plt.xlabel(r"$ r_{\rm com}/R_1 $")
+        plt.ylabel(r"$v_{r,com}$")
+        plt.xticks(visible=False)
+        plt.yticks([0.2,0.4,0.6,0.8,1.0])
+        
+        ### INTERMEDIATE
+        plt.subplot(312)
+        plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=[[1,30],[0,1]],
+                   cmap=mycm)
+        
+        plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
+        plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
+        
+        plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        #plt.xlabel(r"$ r_{\rm com}/R_1 $")
+        plt.ylabel(r"$v_{r,com}$")
+        plt.xticks(visible=False)
+        plt.yticks([0.2,0.4,0.6,0.8,1.0])
+        
+        
+        ### POLE
+        plt.subplot(313)
+        c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
+                              bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                              range=[[1,30],[0,1]],
+                              cmap=mycm)
+        
+
+        
+        plt.plot(rl,np.sqrt(2*1.3/rl),lw=2,color=lc)
+        plt.annotate(r"$v_{esc}(r)$",(25,0.35),color=lc)
+        
+        plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.xlabel(r"$ r_{\rm com}/R_1 $")
+        plt.ylabel(r"$v_{r,com}$")
+        
+        
+        fig.subplots_adjust(hspace=0.0, right=0.9)
+        cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
+        fig.colorbar(im, cax=cbar_ax,label="mass per zone")
+        
+        plt.savefig(output_dir+"velocity_dist_split_linear_"+str(i)+".png",bbox_inches='tight',dpi=150)
+        plt.close()
+        
+
+        ### LOGARITHMIC ###
+        
+        fig=plt.figure(figsize=(5.5,12))
+        
+        nbins=60
+        myrange = [[0,1.5],[-1,0.5]]
+        
+        midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
+        intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
+                        (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
+        pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
+        
+        histx =  np.log10(np.sqrt(xrot**2 + yrot**2 +d['z']**2)).flatten()  
+        histy = np.log10(d['vr_com']).flatten()
+        dm = (d['dvol']*d['rho']).flatten()
+        
+        
+        
+        ### MIDPLANE
+        plt.subplot(311)
+        plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+        
+        
+    
+        plt.plot(np.log10(rl),np.log10(np.sqrt(2*1.3/rl) ),lw=2,color=lc)
+        plt.annotate(r"$v_{esc}(r)$",(1.1,-0.28),color=lc)
+        
+        plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
+                     fontsize='small',color='k')
+        
+        #plt.xlabel(r"$ r_{\rm com}/R_1 $")
+        plt.ylabel(r"$\log_{10 }(v_{r,com})$")
+        plt.xticks(visible=False)
+        plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        ### INTERMEDIATE
+        plt.subplot(312)
+        plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+        
+        plt.plot(np.log10(rl),np.log10(np.sqrt(2*1.3/rl) ),lw=2,color=lc)
+        plt.annotate(r"$v_{esc}(r)$",(1.1,-0.28),color=lc)
+        
+        plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        #plt.xlabel(r"$ r_{\rm com}/R_1 $")
+        plt.ylabel(r"$\log_{10 }(v_{r,com})$")
+        plt.xticks(visible=False)
+        plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        
+        ### POLE
+        plt.subplot(313)
+        c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
+                              bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                              range=myrange,
+                              cmap=mycm)
+        
+    
+        
+        plt.plot(np.log10(rl),np.log10(np.sqrt(2*1.3/rl) ),lw=2,color=lc)
+        plt.annotate(r"$v_{esc}(r)$",(1.1,-0.28),color=lc)
+        
+        plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.xlabel(r"$\log_{10 } ( r_{\rm com}/R_1 )$")
+        plt.ylabel(r"$v_{r,com}$")
+        
+        
+        fig.subplots_adjust(hspace=0.0, right=0.9)
+        cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
+        fig.colorbar(im, cax=cbar_ax,label="mass per zone")
+        plt.savefig(output_dir+"velocity_dist_split_log_"+str(i)+".png",bbox_inches='tight',dpi=150)
+        plt.close()
 
 
 
-    ### LOGARITHMIC ###
-
-    fig=plt.figure(figsize=(5.5,12))
-
-    nbins=60
-    myrange = [[0,1.5],[-1,0.5]]
-    
-    midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
-    intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
-                    (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
-    pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
-    
-    histx =  np.log10(np.sqrt(xrot**2 + yrot**2 +d['z']**2)).flatten()  
-    histy = np.log10(d['vr_com']).flatten()
-    dm = (d['dvol']*d['rho']).flatten()
 
 
 
-    ### MIDPLANE
-    plt.subplot(311)
-    plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
-               bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
-               range=myrange,
-               cmap=mycm)
-    
-    
-    
-    plt.plot(np.log10(rl),np.log10(np.sqrt(2*1.3/rl) ),lw=2,color=lc)
-    plt.annotate(r"$v_{esc}(r)$",(1.1,-0.28),color=lc)
-    
-    plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
-    
-    plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
-                 fontsize='small',color='k')
-    
-    #plt.xlabel(r"$ r_{\rm com}/R_1 $")
-    plt.ylabel(r"$\log_{10 }(v_{r,com})$")
-    plt.xticks(visible=False)
-    plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
-    
-    ### INTERMEDIATE
-    plt.subplot(312)
-    plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
-               bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
-               range=myrange,
-               cmap=mycm)
+    if 'density' in vars:
+        
+        fig=plt.figure(figsize=(5.5,12))
 
-    plt.plot(np.log10(rl),np.log10(np.sqrt(2*1.3/rl) ),lw=2,color=lc)
-    plt.annotate(r"$v_{esc}(r)$",(1.1,-0.28),color=lc)
-    
-    plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
-    
-    #plt.xlabel(r"$ r_{\rm com}/R_1 $")
-    plt.ylabel(r"$\log_{10 }(v_{r,com})$")
-    plt.xticks(visible=False)
-    plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
-    
-    
-    ### POLE
-    plt.subplot(313)
-    c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
-                          bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
-                          range=myrange,
-                          cmap=mycm)
-    
-    
+        nbins=60
+        myrange = [[0,1.5],[-10,0]]
+        
+        midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
+        intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
+                        (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
+        pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
+        
+        selections = [midplane,pole]
+        
+        radius_com = np.sqrt(xrot**2 + yrot**2 +d['z']**2)
+        histx =  np.log10(radius_com).flatten()  
+        histy = np.log10(d['rho']).flatten()
+        dm = (d['dvol']*d['rho']).flatten()
+        
+        
+        
+        ### MIDPLANE
+        plt.subplot(311)
+        plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+        
+        
+        add_grids()
+        
+        plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
+                     fontsize='small',color='k')
+        
+        plt.ylabel(r"$\log_{10 } (\rho)$")
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        ### INTERMEDIATE
+        plt.subplot(312)
+        plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+        
+        add_grids()
+        
+        plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.ylabel(r"$\log_{10 } (\rho)$")
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        
+        ### POLE
+        plt.subplot(313)
+        c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
+                              bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                              range=myrange,
+                              cmap=mycm)
 
-    plt.plot(np.log10(rl),np.log10(np.sqrt(2*1.3/rl) ),lw=2,color=lc)
-    plt.annotate(r"$v_{esc}(r)$",(1.1,-0.28),color=lc)
-    
-    plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
-    
-    plt.xlabel(r"$\log_{10 } ( r_{\rm com}/R_1 )$")
-    plt.ylabel(r"$v_{r,com}$")
-    
-    
-    fig.subplots_adjust(hspace=0.0, right=0.9)
-    cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
-    fig.colorbar(im, cax=cbar_ax,label="mass per zone")
-    plt.savefig(output_dir+"velocity_dist_split_log_"+str(i)+".png",bbox_inches='tight',dpi=150)
-    plt.close()
-
-    
+        add_grids()
+        
+        plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.xlabel(r"$\log_{10 } ( r_{\rm com}/R_1 )$")
+        plt.ylabel(r"$\log_{10 } (\rho)$")
+        
+        
+        fig.subplots_adjust(hspace=0.0, right=0.9)
+        cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
+        fig.colorbar(im, cax=cbar_ax,label="mass per zone")
+        plt.savefig(output_dir+"density_dist_split_log_"+str(i)+".png",bbox_inches='tight',dpi=150)
+        plt.close()
 
 
+    if 'mdot' in vars:
+        fig=plt.figure(figsize=(5.5,12))
 
+        nbins=60
+        myrange = [[0,1.5],[-8,-1]]
+        ylabel = r"$\log_{10 } (r^2 \rho v_{\rm r,com}  )$"
+        
+        midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
+        intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
+                        (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
+        pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
+        
+        selections = [midplane,pole]
+        
+        radius_com = np.sqrt(xrot**2 + yrot**2 +d['z']**2)
+        histx =  np.log10(radius_com).flatten()  
+        histy = np.log10(d['rho']*d['vr_com']*radius_com**2).flatten()
+        dm = (d['dvol']*d['rho']).flatten()
+        
+        
+        
+        ### MIDPLANE
+        plt.subplot(311)
+        plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+        
+        
+        add_grids()
+        
+        
+        plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
+                     fontsize='small',color='k')
+        
+        plt.ylabel(ylabel)
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        ### INTERMEDIATE
+        plt.subplot(312)
+        plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+
+
+        add_grids()
+        plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.ylabel(ylabel)
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        
+        ### POLE
+        plt.subplot(313)
+        c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
+                              bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                              range=myrange,
+                              cmap=mycm)
+
+
+
+        add_grids()
+        plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.xlabel(r"$\log_{10 } ( r_{\rm com}/R_1 )$")
+        plt.ylabel(ylabel)
+        
+        
+        fig.subplots_adjust(hspace=0.0, right=0.9)
+        cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
+        fig.colorbar(im, cax=cbar_ax,label="mass per zone")
+        plt.savefig(output_dir+"mdot_dist_split_log_"+str(i)+".png",bbox_inches='tight',dpi=150)
+        plt.close()
+
+
+
+
+    if 'energy' in vars:
+        fig=plt.figure(figsize=(5.5,12))
+
+        nbins=60
+        myrange = [[0,1.5],[-0.8,0.2]]
+        ylabel = r"$e_{\rm tot}$"
+        
+        midplane = (np.abs(d['gx2v']-np.pi/2)< 2*np.pi* 30/360.).flatten()
+        intermediate = ((np.abs(d['gx2v']-np.pi/2) >  2*np.pi* 30/360.) &
+                        (np.abs(d['gx2v']-np.pi/2) <= 2*np.pi* 60/360.)).flatten()
+        pole = (np.abs(d['gx2v']-np.pi/2) > 2*np.pi* 60/360.).flatten()
+        
+        selections = [midplane,pole]
+        
+        radius_com = np.sqrt(xrot**2 + yrot**2 +d['z']**2)
+        histx =  np.log10(radius_com).flatten()  
+        histy = (d['etot']/d['rho']).flatten()
+        dm = (d['dvol']*d['rho']).flatten()
+
+
+
+        ### MIDPLANE
+        plt.subplot(311)
+        plt.hist2d(histx[midplane],histy[midplane],weights=dm[midplane],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+
+        
+        plt.grid(color=lc,ls=':')
+        
+        
+        plt.annotate(r"lat$<30^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.7,0.92),xycoords='axes fraction',
+                     fontsize='small',color='k')
+        
+        plt.ylabel(ylabel)
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        ### INTERMEDIATE
+        plt.subplot(312)
+        plt.hist2d(histx[intermediate],histy[intermediate],weights=dm[intermediate],
+                   bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                   range=myrange,
+                   cmap=mycm)
+        
+        
+        plt.grid(color=lc,ls=':')
+        plt.annotate(r"$30^\degree<$lat$<60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.ylabel(ylabel)
+        plt.xticks(visible=False)
+        #plt.yticks([-0.75,-0.5,-0.25,0,0.25,0.5])
+        
+        
+        ### POLE
+        plt.subplot(313)
+        c,xe,ye,im=plt.hist2d(histx[pole],histy[pole],weights=dm[pole],
+                              bins=nbins,norm=colors.LogNorm(vmin=1.e-8,vmax=1.e-2),
+                              range=myrange,
+                              cmap=mycm)
+
+
+        
+        plt.grid(color=lc,ls=':')
+        plt.annotate(r"lat$>60^\degree$",(0.35,0.92),xycoords='axes fraction')
+        
+        plt.xlabel(r"$\log_{10 } ( r_{\rm com}/R_1 )$")
+        plt.ylabel(ylabel)
+        
+        
+        fig.subplots_adjust(hspace=0.0, right=0.9)
+        cbar_ax = fig.add_axes([0.925, 0.15, 0.02, 0.7])
+        fig.colorbar(im, cax=cbar_ax,label="mass per zone")
+        plt.savefig(output_dir+"energy_dist_split_log_"+str(i)+".png",bbox_inches='tight',dpi=150)
+        plt.close()
