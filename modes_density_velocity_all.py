@@ -109,6 +109,10 @@ t1=ou.get_t1(orb)
 print t1
 
 
+
+spec_time=[]
+
+
 for i,myfile in enumerate(file_list):
     dblank=ar.athdf(myfile,level=mylevel,quantities=[],subsample=True)
     t=dblank['Time']
@@ -223,3 +227,16 @@ for i,myfile in enumerate(file_list):
     plt.close()
 
     
+    ## ADD THE SPECTRAL DATA TO THE ARRAY
+    entry=[]
+    entry=[t,sma,Omega]
+    for i in range(len(clm.degrees())):
+        entry.append(clm.spectrum()[i] )
+    spec_time.append(entry)
+
+namelist = ['t','sep','Omega']
+for i in range(len(clm.degrees())):
+    namelist.append( "l"+clm.degrees()[i].astype(str) )
+spec_time_table = Table(np.array(spec_time),names=namelist)
+ascii.write(spec_time_table,output=output_dir+"mode_spec_time.dat")
+
