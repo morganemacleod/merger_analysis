@@ -44,7 +44,7 @@ output_dir=args.output_dir
 
 G=1
 file_list = sorted(glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf"))
-#file_list = file_list[30::]
+file_list = file_list[30::]
 print file_list
 
 mylevel=2
