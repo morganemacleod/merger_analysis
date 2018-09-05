@@ -255,5 +255,5 @@ for i in range(len(clm.degrees())):
 spec_time_table = Table(np.array(spec_time),names=namelist)
 ascii.write(spec_time_table,output=output_dir+"mode_spec_time.dat")
 
-vrms_time_table = Table(np.array(vrms_time),names=['t','sep','Vrms','Vrms_m']
+vrms_time_table = Table(np.array(vrms_time),names=['t','sep','Vrms','Vrms_m'])
 ascii.write(vrms_time_table,output=output_dir+"mode_vrms_eq.dat")
