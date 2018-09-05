@@ -111,6 +111,7 @@ print t1
 
 
 spec_time=[]
+vrms_time=[]
 
 
 for i,myfile in enumerate(file_list):
@@ -177,9 +178,9 @@ for i,myfile in enumerate(file_list):
     im=plt.pcolormesh(
         ou.get_plot_array_midplane(xrot),
         ou.get_plot_array_midplane(yrot),
-        ou.get_plot_array_midplane(np.log(d['rho'][:,0,:] ) ),
+        ou.get_plot_array_midplane(np.log10(d['rho'][:,0,:] ) ),
         cmap=plt.cm.magma,rasterized=True,
-        vmin=-12,vmax=0)
+        vmin=-8,vmax=0)
     
     plt.plot(x2rot,y2rot,'w*',markersize=3)
     
@@ -214,9 +215,9 @@ for i,myfile in enumerate(file_list):
     
     ax3 = plt.subplot2grid((3, 3), (2, 2))
     gd=pyshtools.SHGrid.from_array(dr['vel1'][::2,::1,0].T)
-    clm=gd.expand(lmax_calc=20)
+    clm=gd.expand(lmax_calc=16)
     plt.plot(clm.degrees(),clm.spectrum())
-    plt.ylim(1.e-5,0.01)
+    plt.ylim(1.e-5,0.1)
     plt.yscale('log')
     plt.grid()
     plt.ylabel('power (arb. units)')
@@ -226,17 +227,33 @@ for i,myfile in enumerate(file_list):
     plt.savefig(output_dir+"modes_density_velocity_spectrum_"+str(i)+".png",dpi=150)
     plt.close()
 
-    
+
     ## ADD THE SPECTRAL DATA TO THE ARRAY
-    entry=[]
     entry=[t,sma,Omega]
     for i in range(len(clm.degrees())):
         entry.append(clm.spectrum()[i] )
     spec_time.append(entry)
 
+
+    ## ADD THE RMS VELOCITIES
+    select = ((dr['gx2v']>np.pi/2. - np.pi/32.)&(dr['gx2v']<np.pi/2. + np.pi/32.))
+    
+    N = len(dr['vel1'][select])
+    rms = np.sqrt( np.sum(dr['vel1'][select]**2 ) / N )
+    
+    rms_m = np.sqrt( np.sum(dr['rho'][select]*dr['dvol'][select] * dr['vel1'][select]**2 ) / 
+                     np.sum(dr['rho'][select]*dr['dvol'][select]))
+
+    vrms_time.append([t,sma,rms,rms_m])
+    
+
+
+    
 namelist = ['t','sep','Omega']
 for i in range(len(clm.degrees())):
     namelist.append( "l"+clm.degrees()[i].astype(str) )
 spec_time_table = Table(np.array(spec_time),names=namelist)
 ascii.write(spec_time_table,output=output_dir+"mode_spec_time.dat")
 
+vrms_time_table = Table(np.array(vrms_time),names=['t','sep','Vrms','Vrms_m']
+ascii.write(vrms_time_table,output=output_dir+"mode_vrms_eq.dat")
