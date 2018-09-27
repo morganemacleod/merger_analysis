@@ -46,9 +46,9 @@ for i,myfile in enumerate(filelist):
     t = d['Time']
     
     data_entry = [t]
-    select_unbound = d['etot']>0
+    select_unbound = d['bern']>0
     mu = np.sum(d['rho'][select_unbound]*d['dvol'][select_unbound])
-    select_bound = d['etot']<=0
+    select_bound = d['bern']<=0
     mb = np.sum(d['rho'][select_bound]*d['dvol'][select_bound])
     data_entry.append(mb)
     data_entry.append(mu)
