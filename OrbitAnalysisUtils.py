@@ -246,6 +246,8 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
                            (d['vz']-vcom[2])**2)
         d['ei'] = d['press']/(gamma-1)
         d['etot'] = d['epotg'] + d['epotp'] + d['ei'] + d['ek']
+        d['h'] = gamma*d['press']/((gamma-1)*d['rho'])
+        d['bern'] = (d['etot']+d['press'])/d['rho']
         
         del hse_prof,dist2,M1r
     
