@@ -363,7 +363,7 @@ def get_plot_array_vertical(quantity,phislice,
     get_energy=False
     if quantity in ['torque_dens_1_z','torque_dens_2_z']:
         get_torque=True
-    if quantity in ['ek','ei','etot','epot']:
+    if quantity in ['ek','ei','etot','epot','epotg','epotp','h','bern']:
         get_energy=True
     
     x3slicevalue = dblank['x3v'][np.argmin(np.abs(dblank['x3v']+phislice))]

@@ -26,7 +26,8 @@ output_dir=args.output_dir
 
 
 filelist = sorted(glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf"))
-filelist = filelist[args.first_file_index:-1]
+#filelist = sorted(glob(base_dir+"HSE.out1.005[0-9]0.athdf"))
+#filelist = filelist[args.first_file_index:]
 print filelist
 
 radii = [1,2,3,4,6,10,15,20,30]
@@ -46,9 +47,9 @@ for i,myfile in enumerate(filelist):
     t = d['Time']
     
     data_entry = [t]
-    select_unbound = d['bern']>0
+    select_unbound = ((d['bern']>0) & (d['gx1v']>1.0))
     mu = np.sum(d['rho'][select_unbound]*d['dvol'][select_unbound])
-    select_bound = d['bern']<=0
+    select_bound = ((d['bern']<=0) & (d['gx1v']>1.0))
     mb = np.sum(d['rho'][select_bound]*d['dvol'][select_bound])
     data_entry.append(mb)
     data_entry.append(mu)
