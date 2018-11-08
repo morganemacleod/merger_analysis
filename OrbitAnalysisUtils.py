@@ -10,40 +10,47 @@ from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
 
 
-def read_trackfile(m1,m2,fn):
+def read_trackfile(m1,m2,fn,triple=False):
     orb=ascii.read(fn)
-    orb['lgoz'] = np.cumsum( np.gradient(orb['time']) * orb['ldoz'] )
-    orb['ltz'] = orb['lpz'] + orb['lgz'] + orb['lgoz']
+    if triple==False:
+        print "reading orbit file for binary simulation..."
+        orb['lgoz'] = np.cumsum( np.gradient(orb['time']) * orb['ldoz'] )
+        orb['ltz'] = orb['lpz'] + orb['lgz'] + orb['lgoz']
+        
+        orb['sep'] = np.sqrt(orb['x']**2 + orb['y']**2 + orb['z']**2)
+        
+        orb['r'] = np.array([orb['x'],orb['y'],orb['z']]).T
+        orb['rhat'] = np.array([orb['x']/orb['sep'],orb['y']/orb['sep'],orb['z']/orb['sep']]).T
+        
+        orb['v'] = np.array([orb['vx'],orb['vy'],orb['vz']]).T
+        orb['vmag'] = np.linalg.norm(orb['v'],axis=1)
+        orb['vhat'] = np.array([orb['vx']/orb['vmag'],orb['vy']/orb['vmag'],orb['vz']/orb['vmag']]).T
+        
+        orb['agas1'] = np.array([orb['agas1x'],orb['agas1y'],orb['agas1z']]).T
+        orb['agas2'] = np.array([orb['agas2x'],orb['agas2y'],orb['agas2z']]).T
+        
+        orb['rcom'] = np.array([orb['xcom'],orb['ycom'],orb['zcom']]).T
+        orb['vcom'] = np.array([orb['vxcom'],orb['vycom'],orb['vzcom']]).T
     
-    orb['sep'] = np.sqrt(orb['x']**2 + orb['y']**2 + orb['z']**2)
+        F12 = - m1*m2/orb['sep']**2
+        # aceel of 1 by 2
+        orb['a21'] = np.array([-F12/m1*orb['x']/orb['sep'],
+                               -F12/m1*orb['y']/orb['sep'],
+                               -F12/m1*orb['z']/orb['sep']]).T
+        # accel of 2 by 1
+        orb['a12'] = np.array([F12/m2*orb['x']/orb['sep'],
+                               F12/m2*orb['y']/orb['sep'],
+                               F12/m2*orb['z']/orb['sep']]).T
     
-    orb['r'] = np.array([orb['x'],orb['y'],orb['z']]).T
-    orb['rhat'] = np.array([orb['x']/orb['sep'],orb['y']/orb['sep'],orb['z']/orb['sep']]).T
-    
-    orb['v'] = np.array([orb['vx'],orb['vy'],orb['vz']]).T
-    orb['vmag'] = np.linalg.norm(orb['v'],axis=1)
-    orb['vhat'] = np.array([orb['vx']/orb['vmag'],orb['vy']/orb['vmag'],orb['vz']/orb['vmag']]).T
-    
-    orb['agas1'] = np.array([orb['agas1x'],orb['agas1y'],orb['agas1z']]).T
-    orb['agas2'] = np.array([orb['agas2x'],orb['agas2y'],orb['agas2z']]).T
-    
-    orb['rcom'] = np.array([orb['xcom'],orb['ycom'],orb['zcom']]).T
-    orb['vcom'] = np.array([orb['vxcom'],orb['vycom'],orb['vzcom']]).T
-    
-    F12 = - m1*m2/orb['sep']**2
-    # aceel of 1 by 2
-    orb['a21'] = np.array([-F12/m1*orb['x']/orb['sep'],
-                           -F12/m1*orb['y']/orb['sep'],
-                           -F12/m1*orb['z']/orb['sep']]).T
-    # accel of 2 by 1
-    orb['a12'] = np.array([F12/m2*orb['x']/orb['sep'],
-                           F12/m2*orb['y']/orb['sep'],
-                           F12/m2*orb['z']/orb['sep']]).T
-    
-    #mu = 0.631686 + 0.339421 + 0.3
-    #orb['E'] = orb['vmag']**2 / 2. - mu/orb['sep']
-    #orb['a'] = - mu / (2*orb['E'])
-    
+        #mu = 0.631686 + 0.339421 + 0.3
+        #orb['E'] = orb['vmag']**2 / 2. - mu/orb['sep']
+        #orb['a'] = - mu / (2*orb['E'])
+
+    else:
+        print "reading orbit file for triple simulation... (note:ignoring m1,m2)"
+        orb['rcom'] = np.array([orb['xcom'],orb['ycom'],orb['zcom']]).T
+        orb['vcom'] = np.array([orb['vxcom'],orb['vycom'],orb['vzcom']]).T
+        
     
     return orb
 
@@ -120,7 +127,8 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
              x2_min=None,x2_max=None,
              x3_min=None,x3_max=None,
              profile_file="hse_profile.dat",
-             gamma=5./3.  ):
+             gamma=5./3.,
+             triple=False):
     """ Read spherical data and reconstruct cartesian mesh for analysis/plotting """
   
     
@@ -137,7 +145,8 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
     t = d['Time']
     # get properties of orbit
     rcom,vcom = rcom_vcom(orb,t)
-    x2,y2,z2 = pos_secondary(orb,t)
+   
+   
     
     
     # MAKE grid based coordinates
@@ -190,6 +199,7 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
     # CARTESIAN VALUES
     ###
     if(get_cartesian or get_torque or get_energy):
+        print "...getting cartesian arrays..."
         # angles
         cos_th = np.cos(d['gx2v'])
         sin_ph = np.sin(d['gx3v'])
@@ -208,7 +218,9 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
         del cos_th, sin_th, cos_ph, sin_ph
     
     
-    if(get_torque):
+    if(get_torque & (triple==False)):
+        print "...getting torque arrays..."
+        x2,y2,z2 = pos_secondary(orb,t)
         
         # define grav forces
         dist2 = np.sqrt( (d['x']-x2)**2 + (d['y']-y2)**2 + (d['z']-z2)**2 )
@@ -232,7 +244,10 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
         del fdens2x,fdens2y #,fdens2z
         del fdens1x,fdens1y #,fdens1z
 
-    if(get_energy):
+    if(get_energy & (triple==False)):
+        print "...getting energy arrays..."
+        x2,y2,z2 = pos_secondary(orb,t)
+        
         hse_prof = ascii.read(profile_file,
                               names=['r','rho','p','m'])
         #energy
