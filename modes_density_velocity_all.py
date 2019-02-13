@@ -185,14 +185,15 @@ for i,myfile in enumerate(file_list):
     plt.plot(x2rot,y2rot,'w*',markersize=3)
     
     
-    #plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(0.9,1.2),color='k',fontsize='large',backgroundcolor='FloralWhite')
+    plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-2,1.9),color='w',fontsize='large')
+    plt.annotate(r"$a=$"+str(np.round(sma,decimals=2)),(-2,1.7),color='w',fontsize='large')
     plt.axis('equal')
     plt.xlim(-2,3)
     plt.ylim(-1.5,1.5)
     cb = plt.colorbar(im,label=r"$\log_{10} \left(\rho \right)$")
     #plt.show()
-    plt.xlabel("$x'/R_1$")
-    plt.ylabel("$y'/R_1$")
+    plt.xlabel("$x'$ (donor radii)")
+    plt.ylabel("$y'$ (donor radii)")
     plt.tight_layout()
     
     
@@ -215,16 +216,20 @@ for i,myfile in enumerate(file_list):
     
     ax3 = plt.subplot2grid((3, 3), (2, 2))
     gd=pyshtools.SHGrid.from_array(dr['vel1'][::2,::1,0].T)
-    clm=gd.expand(lmax_calc=16)
-    plt.plot(clm.degrees(),clm.spectrum())
+    clm=gd.expand(lmax_calc=10)
+    plt.plot(clm.degrees(),clm.spectrum(),lw=2)
+    plt.axvline(clm.degrees()[np.argmax(clm.spectrum())],ls='--',color='GoldenRod',lw=2)
+    plt.xticks([2,4,6,8,10])
+    plt.xlim(2,10)
     plt.ylim(1.e-5,0.1)
     plt.yscale('log')
     plt.grid()
-    plt.ylabel('power (arb. units)')
+    plt.ylabel(r'power, $S_{ff}(l)$')
     plt.xlabel('degree, $l$')
     plt.tight_layout()
 
     plt.savefig(output_dir+"modes_density_velocity_spectrum_"+str(i)+".png",dpi=150)
+    plt.savefig(output_dir+"modes_density_velocity_spectrum_"+str(i)+".pdf",dpi=150)
     plt.close()
 
 
