@@ -10,10 +10,14 @@ from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
 
 
-def read_trackfile(m1,m2,fn,triple=False):
+def read_trackfile(fn,triple=False,m1=0,m2=0):
     orb=ascii.read(fn)
     if triple==False:
         print "reading orbit file for binary simulation..."
+        if m1==0:
+            m1 = orb['m1']
+        if m2==0:
+            m2 = orb['m2']
         orb['lgoz'] = np.cumsum( np.gradient(orb['time']) * orb['ldoz'] )
         orb['ltz'] = orb['lpz'] + orb['lgz'] + orb['lgoz']
         
@@ -121,7 +125,9 @@ def get_Omega_env_dist(fn,dv=0.05,G=1,rho_thresh=1.e-2,level=2):
     return mydist, np.average(vpf,weights=dmf)
 
 
-def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
+def read_data(fn,orb,
+              m1=0,m2=0,
+              G=1,rsoft2=0.1,level=0,
              get_cartesian=True,get_torque=False,get_energy=False,
              x1_min=None,x1_max=None,
              x2_min=None,x2_max=None,
@@ -130,7 +136,7 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
              gamma=5./3.,
              triple=False):
     """ Read spherical data and reconstruct cartesian mesh for analysis/plotting """
-  
+
     
     print "read_data...reading file",fn
     
@@ -145,10 +151,13 @@ def read_data(fn,orb,m1,m2,G=1,rsoft2=0.1,level=0,
     t = d['Time']
     # get properties of orbit
     rcom,vcom = rcom_vcom(orb,t)
+
+    if m1==0:
+        m1 = np.interp(t,orb['time'],orb['m1'])
+    if m2==0:
+        m2 = np.interp(t,orb['time'],orb['m2'])
    
-   
-    
-    
+       
     # MAKE grid based coordinates
     d['gx1v'] = np.zeros_like(d['rho'])
     for i in range((d['rho'].shape)[2]):

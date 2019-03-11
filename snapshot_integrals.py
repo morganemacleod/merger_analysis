@@ -34,14 +34,14 @@ radii = [1,2,3,4,6,10,15,20,30]
 names = ['time','mass_bound','mass_unbound','r1','r2','r3','r4','r6','r10','r15','r20','r30']
 ############################
 
-orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
+orb = ou.read_trackfile(base_dir+"pm_trackfile.dat",m1=m2,m2=m2)
 #print "ORB: ... ", orb.colnames
 
 data = []
 
 for i,myfile in enumerate(filelist):
     
-    d=ou.read_data(myfile,orb,m1,m2,rsoft2=0.1,level=0,get_cartesian=True,get_torque=False,get_energy=True,
+    d=ou.read_data(myfile,orb,m1=m1,m2=m2,rsoft2=0.05,level=0,get_cartesian=True,get_torque=False,get_energy=True,
                   profile_file=base_dir+"hse_profile.dat")
     
     t = d['Time']
