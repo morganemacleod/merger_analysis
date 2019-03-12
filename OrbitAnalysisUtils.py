@@ -128,7 +128,7 @@ def get_Omega_env_dist(fn,dv=0.05,G=1,rho_thresh=1.e-2,level=2):
 def read_data(fn,orb,
               m1=0,m2=0,
               G=1,rsoft2=0.1,level=0,
-             get_cartesian=True,get_torque=False,get_energy=False,
+              get_cartesian=True,get_cartesian_vel=True,get_torque=False,get_energy=False,
              x1_min=None,x1_max=None,
              x2_min=None,x2_max=None,
              x3_min=None,x3_max=None,
@@ -156,19 +156,21 @@ def read_data(fn,orb,
         m1 = np.interp(t,orb['time'],orb['m1'])
     if m2==0:
         m2 = np.interp(t,orb['time'],orb['m2'])
+
+    data_shape = (len(d['x3v']),len(d['x2v']),len(d['x1v']))
    
        
     # MAKE grid based coordinates
-    d['gx1v'] = np.zeros_like(d['rho'])
-    for i in range((d['rho'].shape)[2]):
+    d['gx1v'] = np.zeros(data_shape)
+    for i in range(data_shape[2]):
         d['gx1v'][:,:,i] = d['x1v'][i]
     
-    d['gx2v'] = np.zeros_like(d['rho'])
-    for j in range((d['rho'].shape)[1]):
+    d['gx2v'] = np.zeros(data_shape)
+    for j in range(data_shape[1]):
         d['gx2v'][:,j,:] = d['x2v'][j]
 
-    d['gx3v'] = np.zeros_like(d['rho'])
-    for k in range((d['rho'].shape)[0]):
+    d['gx3v'] = np.zeros(data_shape)
+    for k in range(data_shape[0]):
         d['gx3v'][k,:,:] = d['x3v'][k]
     
     
@@ -182,16 +184,16 @@ def read_data(fn,orb,
     d3 = d['x3f'][1:] - d['x3f'][:-1]
     
     # grid based versions
-    gd1 = np.zeros_like(d['rho'])
-    for i in range((d['rho'].shape)[2]):
+    gd1 = np.zeros(data_shape)
+    for i in range(data_shape[2]):
         gd1[:,:,i] = d1[i]
     
-    gd2 = np.zeros_like(d['rho'])
-    for j in range((d['rho'].shape)[1]):
+    gd2 = np.zeros(data_shape)
+    for j in range(data_shape[1]):
         gd2[:,j,:] = d2[j]
 
-    gd3 = np.zeros_like(d['rho'])
-    for k in range((d['rho'].shape)[0]):
+    gd3 = np.zeros(data_shape)
+    for k in range(data_shape[0]):
         gd3[k,:,:] = d3[k]
     
     # AREA / VOLUME 
@@ -218,12 +220,13 @@ def read_data(fn,orb,
         d['x'] = d['gx1v'] * sin_th * cos_ph 
         d['y'] = d['gx1v'] * sin_th * sin_ph 
         d['z'] = d['gx1v'] * cos_th
-    
-        # cartesian velocities
-        d['vx'] = sin_th*cos_ph*d['vel1'] + cos_th*cos_ph*d['vel2'] - sin_ph*d['vel3'] 
-        d['vy'] = sin_th*sin_ph*d['vel1'] + cos_th*sin_ph*d['vel2'] + cos_ph*d['vel3'] 
-        d['vz'] = cos_th*d['vel1'] - sin_th*d['vel2']  
 
+        if(get_cartesian_vel or get_torque or get_energy):
+            # cartesian velocities
+            d['vx'] = sin_th*cos_ph*d['vel1'] + cos_th*cos_ph*d['vel2'] - sin_ph*d['vel3'] 
+            d['vy'] = sin_th*sin_ph*d['vel1'] + cos_th*sin_ph*d['vel2'] + cos_ph*d['vel3'] 
+            d['vz'] = cos_th*d['vel1'] - sin_th*d['vel2']  
+            
         del cos_th, sin_th, cos_ph, sin_ph
     
     

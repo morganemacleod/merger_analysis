@@ -25,7 +25,7 @@ base_dir=args.base_dir
 output_dir=args.output_dir
 
 
-filelist = sorted(glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf"))
+filelist = sorted(glob(base_dir+"HSE.out0.00[0-9][0-9][0-9].athdf"))
 #filelist = sorted(glob(base_dir+"HSE.out1.005[0-9]0.athdf"))
 #filelist = filelist[args.first_file_index:]
 print filelist
