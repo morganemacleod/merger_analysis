@@ -10,8 +10,8 @@ import argparse
 ### SIMULATION PARAMS ######
 parser = argparse.ArgumentParser(description='Read m1,m2, input/output directories')
 
-parser.add_argument("m1",type=float,help="mass of particle m1",default=0.0)
-parser.add_argument("m2",type=float,help="mass of particle m2",default=0.0)
+parser.add_argument("--m1",type=float,help="mass of particle m1",default=0.0)
+parser.add_argument("--m2",type=float,help="mass of particle m2",default=0.0)
 
 parser.add_argument("--base_dir", help="data directory (should end with / )")
 #parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
