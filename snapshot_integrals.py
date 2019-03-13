@@ -10,19 +10,20 @@ import argparse
 ### SIMULATION PARAMS ######
 parser = argparse.ArgumentParser(description='Read m1,m2, input/output directories')
 
-parser.add_argument("m1",type=float,help="mass of particle m1")
-parser.add_argument("m2",type=float,help="mass of particle m2")
+parser.add_argument("m1",type=float,help="mass of particle m1",default=0.0)
+parser.add_argument("m2",type=float,help="mass of particle m2",default=0.0)
 
 parser.add_argument("--base_dir", help="data directory (should end with / )")
 #parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
 parser.add_argument("--first_file_index",help="neg number of index for first file in list eg. -100",default=-30,type=int)
-
+parser.add_argument("--gamma",help="adiabatic index",default=5./3.,type=float)
 
 args = parser.parse_args()
 m1=args.m1
 m2=args.m2
 base_dir=args.base_dir
 #output_dir=args.output_dir
+
 
 
 filelist = sorted(glob(base_dir+"HSE.out0.00[0-9][0-9][0-9].athdf"))
@@ -42,7 +43,7 @@ data = []
 for i,myfile in enumerate(filelist):
     
     d=ou.read_data(myfile,orb,m1=m1,m2=m2,rsoft2=0.05,level=0,get_cartesian=True,get_torque=False,get_energy=True,
-                  profile_file=base_dir+"hse_profile.dat")
+                   profile_file=base_dir+"hse_profile.dat",gamma=args.gamma)
     
     t = d['Time']
     sep =  np.interp(t,orb['time'],orb['sep'])
