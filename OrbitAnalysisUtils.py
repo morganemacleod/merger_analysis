@@ -136,7 +136,6 @@ def read_data(fn,orb,
              gamma=5./3.,
              triple=False):
     """ Read spherical data and reconstruct cartesian mesh for analysis/plotting """
-
     
     print "read_data...reading file",fn
     
@@ -146,6 +145,7 @@ def read_data(fn,orb,
                  x2_min=x2_min,x2_max=x2_max,
                  x3_min=x3_min,x3_max=x3_max) # approximate arrays by subsampling if level < max
     print " ...file read, constructing arrays"
+    print " ...gamma=",gamma
     
     # current time
     t = d['Time']
@@ -275,7 +275,7 @@ def read_data(fn,orb,
         d['etot'] = d['epotg'] + d['epotp'] + d['ei'] + d['ek']
         d['h'] = gamma*d['press']/((gamma-1)*d['rho'])
         d['bern'] = (d['etot']+d['press'])/d['rho']
-        
+               
         del hse_prof,dist2,M1r
     
     return d

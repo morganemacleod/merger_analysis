@@ -14,7 +14,7 @@ parser.add_argument("m1",type=float,help="mass of particle m1")
 parser.add_argument("m2",type=float,help="mass of particle m2")
 
 parser.add_argument("--base_dir", help="data directory (should end with / )")
-parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
+#parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
 parser.add_argument("--first_file_index",help="neg number of index for first file in list eg. -100",default=-30,type=int)
 
 
@@ -31,7 +31,7 @@ filelist = sorted(glob(base_dir+"HSE.out0.00[0-9][0-9][0-9].athdf"))
 print filelist
 
 radii = [1,2,3,4,6,10,15,20,30]
-names = ['time','mass_bound','mass_unbound','r1','r2','r3','r4','r6','r10','r15','r20','r30']
+names = ['time','sep','mass_bound','mass_unbound','r1','r2','r3','r4','r6','r10','r15','r20','r30']
 ############################
 
 orb = ou.read_trackfile(base_dir+"pm_trackfile.dat",m1=m2,m2=m2)
@@ -45,8 +45,9 @@ for i,myfile in enumerate(filelist):
                   profile_file=base_dir+"hse_profile.dat")
     
     t = d['Time']
+    sep =  np.interp(t,orb['time'],orb['sep'])
     
-    data_entry = [t]
+    data_entry = [t,sep]
     select_unbound = ((d['bern']>0) & (d['gx1v']>1.0))
     mu = np.sum(d['rho'][select_unbound]*d['dvol'][select_unbound])
     select_bound = ((d['bern']<=0) & (d['gx1v']>1.0))
@@ -63,4 +64,4 @@ for i,myfile in enumerate(filelist):
     data.append(data_entry)
 
 datatable = Table(np.array(data),names=names )
-ascii.write(datatable,output=output_dir+"mass_time.dat")
+ascii.write(datatable,output=base_dir+"mass_time.dat")
