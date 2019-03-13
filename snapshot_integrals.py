@@ -22,7 +22,7 @@ args = parser.parse_args()
 m1=args.m1
 m2=args.m2
 base_dir=args.base_dir
-output_dir=args.output_dir
+#output_dir=args.output_dir
 
 
 filelist = sorted(glob(base_dir+"HSE.out0.00[0-9][0-9][0-9].athdf"))
