@@ -49,7 +49,8 @@ mylevel=2
 
 
 do_vertical = True
-plot_vars = ['rho','entropy','mach','vr','divV']
+#plot_vars = ['rho','entropy','mach','vr','divV']
+plot_vars = ['rho']
 ####################################
 
 
@@ -61,7 +62,7 @@ def get_midplane_theta(myfile,level=0):
 
 
 
-orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
+orb = ou.read_trackfile(base_dir+"pm_trackfile.dat",m1=m1,m2=m2)
 t1=ou.get_t1(orb)
 print "t1=",t1
 
@@ -223,7 +224,8 @@ for i,myfile in enumerate(file_list):
         rcom,vcom = ou.rcom_vcom(orb,t)
         x2,y2,z2 = ou.pos_secondary(orb,t)
         
-        theta_rot = -np.arctan2(y2,x2)
+        #theta_rot = -np.arctan2(y2,x2)
+        theta_rot=0.0
         # read the data
         d={}
         x,z,d['rho'] = ou.get_plot_array_vertical("rho",theta_rot,

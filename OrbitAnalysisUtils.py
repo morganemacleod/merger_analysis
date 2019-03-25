@@ -379,7 +379,7 @@ def get_roche_function(orb,time,M1=1,M2=0.3):
 def get_plot_array_vertical(quantity,phislice,
                             myfile,profile_file,orb,m1,m2,
                            G=1,rsoft2=0.1,level=0,
-                           x1_max=None):
+                            x1_max=None):
     
     dblank=ar.athdf(myfile,level=level,quantities=[],subsample=True)
     
@@ -392,7 +392,7 @@ def get_plot_array_vertical(quantity,phislice,
         get_torque=True
     if quantity in ['ek','ei','etot','epot','epotg','epotp','h','bern']:
         get_energy=True
-    
+
     x3slicevalue = dblank['x3v'][np.argmin(np.abs(dblank['x3v']+phislice))]
     d=read_data(myfile,orb,m1,m2,G=G,rsoft2=rsoft2,level=level,
                 get_cartesian=get_cartesian,
