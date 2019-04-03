@@ -94,7 +94,7 @@ def shift_phi_val(phiarr,valarr,theta_rot):
 
 
 
-orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
+orb = ou.read_trackfile(base_dir+"pm_trackfile.dat",m1=m1,m2=m2)
 
 print "ORB: ... ", orb.colnames
 
@@ -172,7 +172,7 @@ for i,myfile in enumerate(file_list):
     
 
     #### NOW MAKE THE FIGURE #####
-    plt.figure(figsize=(10,10))
+    plt.figure(figsize=(8,8))
     
     plt.subplot2grid((3, 3), (0, 0), colspan=3,rowspan=2)
     im=plt.pcolormesh(
@@ -186,7 +186,7 @@ for i,myfile in enumerate(file_list):
     
     
     plt.annotate(r"$t-t_1=$"+str(np.round(t-t1,decimals=2)),(-2,1.9),color='w',fontsize='large')
-    plt.annotate(r"$a=$"+str(np.round(sma,decimals=2)),(-2,1.7),color='w',fontsize='large')
+    plt.annotate(r"$a=$"+str(np.round(sma,decimals=2)),(-2,1.65),color='w',fontsize='large')
     plt.axis('equal')
     plt.xlim(-2,3)
     plt.ylim(-1.5,1.5)
