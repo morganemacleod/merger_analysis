@@ -59,6 +59,13 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
     return orb
 
 
+def get_midplane_theta(myfile,level=0):
+    dblank=ar.athdf(myfile,level=level,quantities=[],subsample=True)
+
+    # get closest to midplane value
+    return dblank['x2v'][ np.argmin(np.abs(dblank['x2v']-np.pi/2.) ) ]
+
+
 def get_t1(orb,skip=1):
     sel = orb['sep']<1.5
     return np.interp(1.0,np.flipud(orb[sel]['sep'][::skip]),np.flipud(orb[sel]['time'][::skip]) )

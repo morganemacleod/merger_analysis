@@ -290,12 +290,13 @@ for i,myfile in enumerate(file_list):
                               rasterized=True,
                               vmin=-10,vmax=0)
         
-            plt.plot(np.sqrt(x2**2 + y2**2)-np.linalg.norm(rcom),
-                     z2,
-                     'w*',markersize=3)
+            #plt.plot(np.sqrt(x2**2 + y2**2)-np.linalg.norm(rcom),
+            #         z2,
+            #         'w*',markersize=3)
             
             plt.axis('equal')
-            plt.xlabel(r"$x'/R_1$")
+            #plt.xlabel(r"$x'/R_1$")
+            plt.xlabel(r"$x/R_1$")
             plt.ylabel(r"$z/R_1$")
             plt.colorbar(im,label=r"$\log_{10} \left( \rho \right)$")
             
