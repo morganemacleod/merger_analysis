@@ -4,7 +4,7 @@ import matplotlib as mpl
 import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
-import athena_read as ar
+from merger_analysis import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -13,7 +13,7 @@ from mpl_toolkits.axes_grid1 import ImageGrid
 def read_trackfile(fn,triple=False,m1=0,m2=0):
     orb=ascii.read(fn)
     if triple==False:
-        print "reading orbit file for binary simulation..."
+        print ("reading orbit file for binary simulation...")
         if m1==0:
             m1 = orb['m1']
         if m2==0:
@@ -51,7 +51,7 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
         #orb['a'] = - mu / (2*orb['E'])
 
     else:
-        print "reading orbit file for triple simulation... (note:ignoring m1,m2)"
+        print ("reading orbit file for triple simulation... (note:ignoring m1,m2)")
         orb['rcom'] = np.array([orb['xcom'],orb['ycom'],orb['zcom']]).T
         orb['vcom'] = np.array([orb['vxcom'],orb['vycom'],orb['vzcom']]).T
         
@@ -126,8 +126,8 @@ def get_Omega_env_dist(fn,dv=0.05,G=1,rho_thresh=1.e-2,level=2):
     mydist = np.histogram(vpf,weights=dmf,bins=mybins)
     GMtot=G*np.sum(mydist[0])
     
-    print "Total mass GM = ",G*np.sum(dmf)
-    print "Total mass GM (distribution) = ", GMtot
+    print ("Total mass GM = ",G*np.sum(dmf))
+    print ("Total mass GM (distribution) = ", GMtot)
     
     return mydist, np.average(vpf,weights=dmf)
 
@@ -144,15 +144,15 @@ def read_data(fn,orb,
              triple=False):
     """ Read spherical data and reconstruct cartesian mesh for analysis/plotting """
     
-    print "read_data...reading file",fn
+    print ("read_data...reading file",fn)
     
     
     d = ar.athdf(fn,level=level,subsample=True,
                  x1_min=x1_min,x1_max=x1_max,
                  x2_min=x2_min,x2_max=x2_max,
                  x3_min=x3_min,x3_max=x3_max) # approximate arrays by subsampling if level < max
-    print " ...file read, constructing arrays"
-    print " ...gamma=",gamma
+    print (" ...file read, constructing arrays")
+    print (" ...gamma=",gamma)
     
     # current time
     t = d['Time']
@@ -217,7 +217,7 @@ def read_data(fn,orb,
     # CARTESIAN VALUES
     ###
     if(get_cartesian or get_torque or get_energy):
-        print "...getting cartesian arrays..."
+        print ("...getting cartesian arrays...")
         # angles
         cos_th = np.cos(d['gx2v'])
         sin_ph = np.sin(d['gx3v'])
@@ -238,7 +238,7 @@ def read_data(fn,orb,
     
     
     if(get_torque & (triple==False)):
-        print "...getting torque arrays..."
+        print ("...getting torque arrays...")
         x2,y2,z2 = pos_secondary(orb,t)
         
         # define grav forces
@@ -264,7 +264,7 @@ def read_data(fn,orb,
         del fdens1x,fdens1y #,fdens1z
 
     if(get_energy & (triple==False)):
-        print "...getting energy arrays..."
+        print ("...getting energy arrays...")
         x2,y2,z2 = pos_secondary(orb,t)
         
         hse_prof = ascii.read(profile_file,
