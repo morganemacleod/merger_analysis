@@ -15,7 +15,7 @@ parser.add_argument("--m2",type=float,help="mass of particle m2",default=0.0)
 
 parser.add_argument("--base_dir", help="data directory (should end with / )")
 #parser.add_argument("--output_dir", help="directory to save figures/output (should end with / )")
-parser.add_argument("--first_file_index",help="neg number of index for first file in list eg. -100",default=-30,type=int)
+parser.add_argument("--first_file_index",help="neg number of index for first file in list eg. -100 (or 0 to start at the beginning)",default=-30,type=int)
 parser.add_argument("--gamma",help="adiabatic index",default=5./3.,type=float)
 
 args = parser.parse_args()
@@ -32,7 +32,7 @@ filelist = sorted(glob(base_dir+"HSE.out0.00[0-9][0-9][0-9].athdf"))
 print filelist
 
 radii = [1,2,3,4,6,10,15,20,30]
-names = ['time','sep','mass_bound','mass_unbound','r1','r2','r3','r4','r6','r10','r15','r20','r30']
+names = ['time','sep','mass_bound','mass_unbound','mass_bound_rL1','mass_unbound_rL1','rL1','r1','r2','r3','r4','r6','r10','r15','r20','r30']
 ############################
 
 orb = ou.read_trackfile(base_dir+"pm_trackfile.dat",m1=m2,m2=m2)
@@ -56,6 +56,24 @@ for i,myfile in enumerate(filelist):
     data_entry.append(mb)
     data_entry.append(mu)
 
+    del select_unbound, select_bound
+
+    ## Within L1 special case (assume m1=1)
+    q = m2/1.0
+    rL1 = max(1.0, sep / (1.0+np.sqrt(q)) ) # larger of between R_donor and L1 point
+    select_L1 = d['gx1v']<=rL1
+    mL1 = np.sum(d['rho'][select_L1]*d['dvol'][select_L1])
+    select_unbound_L1 = ((d['bern']>0) & (d['gx1v']>rL1))
+    muL1 = np.sum(d['rho'][select_unbound_L1]*d['dvol'][select_unbound_L1])
+    select_bound_L1 = ((d['bern']<=0) & (d['gx1v']>rL1))
+    mbL1 = np.sum(d['rho'][select_bound_L1]*d['dvol'][select_bound_L1])
+    data_entry.append(mbL1)
+    data_entry.append(muL1)
+    data_entry.append(mL1)
+
+    del select_L1, select_unbound_L1, select_bound_L1
+
+    ## Other radii
     for my_r in radii:
         select = d['gx1v']<=my_r
         my_m  = np.sum(d['rho'][select]*d['dvol'][select])
@@ -65,4 +83,4 @@ for i,myfile in enumerate(filelist):
     data.append(data_entry)
 
 datatable = Table(np.array(data),names=names )
-ascii.write(datatable,output=base_dir+"mass_time.dat")
+ascii.write(datatable,output=base_dir+"mass_time_L1.dat")
