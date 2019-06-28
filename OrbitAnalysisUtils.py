@@ -55,9 +55,13 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
         print ("reading orbit file for triple simulation... (note:ignoring m1,m2)")
         orb['rcom'] = np.array([orb['xcom'],orb['ycom'],orb['zcom']]).T
         orb['vcom'] = np.array([orb['vxcom'],orb['vycom'],orb['vzcom']]).T
+
+    # clean to remove restarts
+    orb_clean_sel = orb['time'][1:] > orb['time'][:-1] 
+    orb_clean = orb[1:][orb_clean_sel].copy()
         
     
-    return orb
+    return orb_clean
 
 
 def get_midplane_theta(myfile,level=0):
