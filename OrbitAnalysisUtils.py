@@ -5,7 +5,7 @@ import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
 #from merger_analysis import athena_read as ar
-import athena_read as ar
+from . import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
