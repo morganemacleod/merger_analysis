@@ -173,17 +173,9 @@ def read_data(fn,orb,
    
        
     # MAKE grid based coordinates
-    d['gx1v'] = np.zeros(data_shape)
-    for i in range(data_shape[2]):
-        d['gx1v'][:,:,i] = d['x1v'][i]
-    
-    d['gx2v'] = np.zeros(data_shape)
-    for j in range(data_shape[1]):
-        d['gx2v'][:,j,:] = d['x2v'][j]
-
-    d['gx3v'] = np.zeros(data_shape)
-    for k in range(data_shape[0]):
-        d['gx3v'][k,:,:] = d['x3v'][k]
+    d['gx1v']=np.broadcast_to(d['x1v'],(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )
+    d['gx2v']=np.swapaxes(np.broadcast_to(d['x2v'],(len(d['x3v']),len(d['x1v']),len(d['x2v'])) ),1,2)
+    d['gx3v']=np.swapaxes(np.broadcast_to(d['x3v'],(len(d['x1v']),len(d['x2v']),len(d['x3v'])) ) ,0,2 )
     
     
     ####
@@ -196,17 +188,9 @@ def read_data(fn,orb,
     d3 = d['x3f'][1:] - d['x3f'][:-1]
     
     # grid based versions
-    gd1 = np.zeros(data_shape)
-    for i in range(data_shape[2]):
-        gd1[:,:,i] = d1[i]
-    
-    gd2 = np.zeros(data_shape)
-    for j in range(data_shape[1]):
-        gd2[:,j,:] = d2[j]
-
-    gd3 = np.zeros(data_shape)
-    for k in range(data_shape[0]):
-        gd3[k,:,:] = d3[k]
+    gd1=np.broadcast_to(d1,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )
+    gd2=np.swapaxes(np.broadcast_to(d2,(len(d['x3v']),len(d['x1v']),len(d['x2v'])) ),1,2)
+    gd3=np.swapaxes(np.broadcast_to(d3,(len(d['x1v']),len(d['x2v']),len(d['x3v'])) ) ,0,2 )
     
     # AREA / VOLUME 
     sin_th = np.sin(d['gx2v'])
