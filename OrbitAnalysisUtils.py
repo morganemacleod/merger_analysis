@@ -66,7 +66,7 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
 
 def get_orb_hst(base_dir):
 
-    orb = ou.read_trackfile(base_dir+"pm_trackfile.dat")
+    orb = read_trackfile(base_dir+"pm_trackfile.dat")
 
     print "ORB: ... ", orb.colnames
 
