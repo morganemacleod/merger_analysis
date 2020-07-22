@@ -64,6 +64,48 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
     return orb_clean
 
 
+def get_orb_hst(base_dir):
+
+    orb = ou.read_trackfile(base_dir+"pm_trackfile.dat")
+
+    print "ORB: ... ", orb.colnames
+
+    hst = ascii.read(base_dir+"HSE.hst",
+                     names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv','mr1','mr12'])
+    print "\nHSE: ...", hst.colnames
+
+    mg = hst['mr12'][0]
+
+    orb['M1'] = np.interp(orb['time'],hst['time'],hst['mr1']) + orb['m1']
+    orb['M2'] = orb['m2']
+
+    orb['x1'] = -orb['xcom']
+    orb['y1'] = -orb['ycom']
+    orb['z1'] = -orb['zcom']
+    orb['x2'] = orb['x']-orb['xcom']
+    orb['y2'] = orb['y']-orb['ycom']
+    orb['z2'] = orb['z']-orb['zcom']
+
+    orb['v1x'] = -orb['vxcom']
+    orb['v1y'] = -orb['vycom']
+    orb['v1z'] = -orb['vzcom']
+    orb['v2x'] = orb['vx']-orb['vxcom']
+    orb['v2y'] = orb['vy']-orb['vycom']
+    orb['v2z'] = orb['vz']-orb['vzcom']
+
+    orb['PE'] = -orb['M1']*orb['M2']/orb['sep']
+    orb['KE1'] = 0.5*orb['M1']*(orb['v1x']**2 + orb['v1y']**2 + orb['v1z']**2)
+    orb['KE2'] = 0.5*orb['M2']*(orb['v2x']**2 + orb['v2y']**2 + orb['v2z']**2)
+    orb['E'] = orb['KE1'] + orb['KE2'] + orb['PE']
+    orb['a'] = -orb['M1']*orb['M2']/(2*orb['E'])
+
+    orb['Lz'] = orb['M1']*(orb['x1']*orb['v1y']-orb['y1']*orb['v1x']) + orb['M2']*(orb['x2']*orb['v2y']-orb['y2']*orb['v2x'])
+    orb['e'] = np.sqrt( 1.0 - orb['Lz']**2 *(orb['M1']+orb['M2'])/(orb['a']*(orb['M1']*orb['M2'])**2) )
+    
+    return orb,hst
+
+
+
 def get_midplane_theta(myfile,level=0):
     dblank=ar.athdf(myfile,level=level,quantities=[],subsample=True)
 
