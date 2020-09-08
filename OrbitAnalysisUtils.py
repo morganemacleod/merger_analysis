@@ -5,7 +5,8 @@ import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
 #from merger_analysis import athena_read as ar
-from . import athena_read as ar
+#from . import athena_read as ar
+import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -47,9 +48,6 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
                                F12/m2*orb['y']/orb['sep'],
                                F12/m2*orb['z']/orb['sep']]).T
     
-        #mu = 0.631686 + 0.339421 + 0.3
-        #orb['E'] = orb['vmag']**2 / 2. - mu/orb['sep']
-        #orb['a'] = - mu / (2*orb['E'])
 
     else:
         print ("reading orbit file for triple simulation... (note:ignoring m1,m2)")
@@ -57,20 +55,20 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
         orb['vcom'] = np.array([orb['vxcom'],orb['vycom'],orb['vzcom']]).T
 
     # clean to remove restarts
-    orb_clean_sel = orb['time'][1:] > orb['time'][:-1] 
-    orb_clean = orb[1:][orb_clean_sel].copy()
-        
+    #orb_clean_sel = orb['time'][1:] > orb['time'][:-1] 
+    #orb_clean = orb[1:][orb_clean_sel].copy()
+    orb_clean = orb.copy()   
     
     return orb_clean
 
 
-def get_orb_hst(base_dir):
+def get_orb_hst(base_dir,filestart="HSE"):
 
     orb = read_trackfile(base_dir+"pm_trackfile.dat")
 
     print "ORB: ... ", orb.colnames
 
-    hst = ascii.read(base_dir+"HSE.hst",
+    hst = ascii.read(base_dir+filestart+".hst",
                      names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv','mr1','mr12'])
     print "\nHSE: ...", hst.colnames
 
@@ -313,6 +311,7 @@ def read_data(fn,orb,
         d['etot'] = d['epotg'] + d['epotp'] + d['ei'] + d['ek']
         d['h'] = gamma*d['press']/((gamma-1)*d['rho'])
         d['bern'] = (d['etot']+d['press'])/d['rho']
+        d['ek_star'] = 0.5*d['rho']*(d['vx']**2 + d['vy']**2 + d['vz']**2)
                
         del hse_prof,dist2,M1r
     

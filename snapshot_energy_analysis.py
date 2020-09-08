@@ -5,42 +5,44 @@ from glob import glob
 import OrbitAnalysisUtils as ou
 
 ### SIMULATION PARAMS ######
-m1 = 0.410103
-m2 = 0.3
+base_dir = "/Users/morganmacleod/Dropbox/CE_princeton/Eccentric/Analysis/EccPassage/q01/test/rp1.7/"
+output_dir = base_dir
 
-base_dir = "/Volumes/DATAVolume/athenaruns/pm_envelope/pole/syncRL/ejecta_v1/a206_res24_fc10/"
-output_dir = ""
-
-#filelist = glob(base_dir+"HSE.out1.002[0-9][0-9].athdf")
-#filelist = glob(base_dir+"HSE.out1.00[0-9][0-9][0-9].athdf")
-filelist = glob(base_dir+"HSE.out1.005[0-9][0,5].athdf")
+filelist = glob(base_dir+"EccSP.out1.000[0-9][0-9].athdf")
 #filelist = filelist[-41:-1]
 print filelist
 
-names = ['time','EK1','EK2','EPp','EPg','EPpg','EKg','EIg','Egas','Etot','EPg_sg','Etot_sg']
+names = ['time','EK1','EK2','EPp','EPg','EPpg','EKg','EIg','Egas','Etot','EPg_sg','Etot_sg',
+         'Ekg_star','EPg_star','EIg_star','Etot_star']
 ############################
 
-orb = ou.read_trackfile(m1,m2,base_dir+"pm_trackfile.dat")
+orb = ou.read_trackfile(base_dir+"pm_trackfile.dat")
 #print "ORB: ... ", orb.colnames
 
-
+m1 = orb['m1'][0]
+m2 = orb['m2'][0]
 
 
 def epotSG(d):
-   """ return the gas self-gravitational potential """
+   """ return the gas self-gravitational potential energy """
    dmr = np.sum(d['rho']*d['dvol'],axis=(0,1))
    mr = np.cumsum(dmr)
    return np.sum(-(mr)*dmr/d['x1v'])
 
-
+def epot1SG(d,cond):
+   """ return the gas self-gravitational potential energy + M1 SG potential energy """
+   rho_sel = np.where(cond,d['rho'],0.0)
+   dmr = np.sum(rho_sel*d['dvol'],axis=(0,1))
+   mr = np.cumsum(dmr) + m1
+   return np.sum(-(mr)*dmr/d['x1v'])
 
 
 data = []
 
 for i,myfile in enumerate(filelist):
     
-    d=ou.read_data(myfile,orb,m1,m2,rsoft2=0.05,level=0,get_cartesian=True,get_torque=False,get_energy=True,
-                   profile_file=base_dir+"hse_profile.dat",x1_max=30)
+    d=ou.read_data(myfile,orb,rsoft2=0.1,level=0,get_cartesian=True,get_torque=False,get_energy=True,
+                   profile_file=base_dir+"hse_profile.dat",x1_max=80,gamma=1.35)
     
     t = d['Time']
     
@@ -64,7 +66,11 @@ for i,myfile in enumerate(filelist):
     Egas = np.sum(d['etot']*d['dvol'])
 
     EPg_sg = epotSG(d)
-    
+
+    star = (d['rho']>1.e-4) & (d['x1v']<2)
+    EKg_star = np.sum(d['ek_star'][star]*d['dvol'][star])
+    EPg_star = epot1SG(d,star)
+    EIg_star = np.sum(d['ei'][star]*d['dvol'][star])
     
 
     data_entry = [t]
@@ -79,6 +85,10 @@ for i,myfile in enumerate(filelist):
     data_entry.append(Egas+EK1+EK2+EPp)
     data_entry.append(EPg_sg)
     data_entry.append(EPg_sg + EPpg + EKg + EIg + EK1 + EK2 + EPp)
+    data_entry.append(EKg_star)
+    data_entry.append(EPg_star)
+    data_entry.append(EIg_star)
+    data_entry.append(EKg_star+EPg_star+EIg_star)
     
     data.append(data_entry)
 
