@@ -450,7 +450,7 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
     dataset_sizes_cumulative = np.cumsum(dataset_sizes)
     variable_names = f.attrs['VariableNames'][:]
     variable_names = np.array([str(i,'utf-8') for i in variable_names])
-    print(variable_names)
+    #print(variable_names)
     quantity_datasets = []
     quantity_indices = []
     for q in quantities:
@@ -599,7 +599,6 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
         ku_d = min(ku_d, k_max) - k_min
 
         # Assign values
-        print(quantities,quantity_datasets,quantity_indices)
         for q,dataset,index in zip(quantities, quantity_datasets, quantity_indices):
           block_data = f[dataset][index,block_num,:]
           if s > 1:
