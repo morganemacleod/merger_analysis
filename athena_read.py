@@ -324,6 +324,7 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
 
     # Set volume function for preset coordinates if needed
     coord = f.attrs['Coordinates']
+    coord = str(coord,'utf-8')
     if level < max_level and not subsample and not fast_restrict and vol_func is None:
       x1_rat = f.attrs['RootGridX1'][2]
       x2_rat = f.attrs['RootGridX2'][2]
@@ -358,6 +359,7 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
                 ((rp**3-rm**3) * abs(cosm-cosp) + a**2 * (rp-rm) * abs(cosm**3-cosp**3)) \
                 * (phip-phim)
       else:
+        print(coord)
         raise AthenaError('Coordinates not recognized')
 
     # Set cell center functions for preset coordinates
@@ -370,8 +372,9 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
       elif coord == 'spherical_polar':
         center_func_1 = lambda xm,xp : 3.0/4.0 * (xp**4-xm**4) / (xp**3-xm**3)
       elif coord == 'schwarzschild':
-        center_func_1 = lambda xm,xp : (0.5*(xm**3+xp**3)) ** 1.0/3.0
+        center_func_1 = lambda xm,xp : (0.5*(xm**3+xp**3))**(1.0/3.0)
       else:
+        print (str(coord))
         raise AthenaError('Coordinates not recognized')
     if center_func_2 is None:
       if coord == 'cartesian' or coord == 'cylindrical' or coord == 'minkowski' \
@@ -430,8 +433,10 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
           error_string = 'Quantity not recognized: file does not include "{0}" but does' \
               + ' include {1}'
           raise AthenaError(error_string.format(q, possibilities))
-    quantities = [str(q) for q in quantities \
+    quantities = [str(q,'utf-8') for q in quantities \
         if q not in coord_quantities and q not in attr_quantities]
+
+    print("quantities = ",quantities)
 
     # Store file attribute metadata
     for key in attr_quantities:
@@ -440,13 +445,17 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
     # Get metadata describing file layout
     num_blocks = f.attrs['NumMeshBlocks']
     dataset_names = f.attrs['DatasetNames'][:]
+    #print("dataset_names=",dataset_names)
     dataset_sizes = f.attrs['NumVariables'][:]
     dataset_sizes_cumulative = np.cumsum(dataset_sizes)
     variable_names = f.attrs['VariableNames'][:]
+    variable_names = np.array([str(i,'utf-8') for i in variable_names])
+    print(variable_names)
     quantity_datasets = []
     quantity_indices = []
     for q in quantities:
       var_num = np.where(variable_names == q)[0][0]
+      print("...reading",var_num,q)
       dataset_num = np.where(dataset_sizes_cumulative > var_num)[0][0]
       if dataset_num == 0:
         dataset_index = var_num
@@ -590,6 +599,7 @@ def athdf(filename, data=None, quantities=None, dtype=np.float32, level=None,
         ku_d = min(ku_d, k_max) - k_min
 
         # Assign values
+        print(quantities,quantity_datasets,quantity_indices)
         for q,dataset,index in zip(quantities, quantity_datasets, quantity_indices):
           block_data = f[dataset][index,block_num,:]
           if s > 1:

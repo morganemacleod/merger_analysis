@@ -5,8 +5,8 @@ import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
 #from merger_analysis import athena_read as ar
-#from . import athena_read as ar
-import athena_read as ar
+from . import athena_read as ar
+#import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -66,11 +66,11 @@ def get_orb_hst(base_dir,filestart="HSE"):
 
     orb = read_trackfile(base_dir+"pm_trackfile.dat")
 
-    print "ORB: ... ", orb.colnames
+    print ("ORB: ... ", orb.colnames)
 
     hst = ascii.read(base_dir+filestart+".hst",
-                     names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv','mr1','mr12'])
-    print "\nHSE: ...", hst.colnames
+                     names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv','mr1','mr12','scalar'])
+    print ("\nHSE: ...", hst.colnames)
 
     mg = hst['mr12'][0]
 

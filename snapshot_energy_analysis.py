@@ -13,7 +13,7 @@ filelist = glob(base_dir+"EccSP.out1.000[0-9][0-9].athdf")
 print filelist
 
 names = ['time','EK1','EK2','EPp','EPg','EPpg','EKg','EIg','Egas','Etot','EPg_sg','Etot_sg',
-         'Ekg_star','EPg_star','EIg_star','Etot_star']
+         'EKg_star','EPg_star','EIg_star','Etot_star']
 ############################
 
 orb = ou.read_trackfile(base_dir+"pm_trackfile.dat")
