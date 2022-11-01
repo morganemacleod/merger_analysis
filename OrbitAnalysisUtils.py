@@ -5,8 +5,8 @@ import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
 #from merger_analysis import athena_read as ar
-#from . import athena_read as ar
-import athena_read as ar
+from . import athena_read as ar
+#import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -48,9 +48,6 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
                                F12/m2*orb['y']/orb['sep'],
                                F12/m2*orb['z']/orb['sep']]).T
     
-        #mu = 0.631686 + 0.339421 + 0.3
-        #orb['E'] = orb['vmag']**2 / 2. - mu/orb['sep']
-        #orb['a'] = - mu / (2*orb['E'])
 
     else:
         print ("reading orbit file for triple simulation... (note:ignoring m1,m2)")
@@ -58,22 +55,22 @@ def read_trackfile(fn,triple=False,m1=0,m2=0):
         orb['vcom'] = np.array([orb['vxcom'],orb['vycom'],orb['vzcom']]).T
 
     # clean to remove restarts
-    orb_clean_sel = orb['time'][1:] > orb['time'][:-1] 
-    orb_clean = orb[1:][orb_clean_sel].copy()
-        
+    #orb_clean_sel = orb['time'][1:] > orb['time'][:-1] 
+    #orb_clean = orb[1:][orb_clean_sel].copy()
+    orb_clean = orb.copy()   
     
     return orb_clean
 
 
-def get_orb_hst(base_dir):
+def get_orb_hst(base_dir,filestart="HSE"):
 
     orb = read_trackfile(base_dir+"pm_trackfile.dat")
 
-    print "ORB: ... ", orb.colnames
+    print ("ORB: ... ", orb.colnames)
 
-    hst = ascii.read(base_dir+"HSE.hst",
-                     names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv','mr1','mr12'])
-    print "\nHSE: ...", hst.colnames
+    hst = ascii.read(base_dir+filestart+".hst",
+                     names=['time','dt','mass','1-mom','2-mom','3-mom','1-KE','2-KE','3-KE','tot-E','mxOmegaEnv','mEnv','mr1','mr12','scalar'])
+    print ("\nHSE: ...", hst.colnames)
 
     mg = hst['mr12'][0]
 
@@ -299,23 +296,53 @@ def read_data(fn,orb,
         print ("...getting energy arrays...")
         x2,y2,z2 = pos_secondary(orb,t)
         
-        hse_prof = ascii.read(profile_file,
-                              names=['r','rho','p','m'])
-        #energy
+        #hse_prof = ascii.read(profile_file,
+        #                      names=['r','rho','p','m'])
+        #M1r = np.interp(d['gx1v'],hse_prof['r'],hse_prof['m'])
+        
+        #energy (monopole self grav)
         dist2 = np.sqrt( (d['x']-x2)**2 + (d['y']-y2)**2 + (d['z']-z2)**2 )
-        M1r = np.interp(d['gx1v'],hse_prof['r'],hse_prof['m'])
-        # should update with the real potential
-        d['epotg'] = -G*(M1r-m1)*d['rho']/d['gx1v']
-        d['epotp'] = -G*m1*d['rho']/d['gx1v'] - G*m2*d['rho']*pspline(dist2,rsoft2)
+
+        #NGRAV = 100
+        #rmin = 0.3
+        #rmax = 100.0
+        #logr = np.linspace(np.log10(rmin),np.log10(rmax),NGRAV)
+        
+        #menc_logr = np.zeros_like(logr)
+        #for i,lr in enumerate(logr):
+        #    sel = np.log10(d['gx1v'])<lr
+        #    menc_logr[i] = np.sum( (d['rho']*d['dvol'])[sel] )
+
+        #mencr_gas = np.interp(np.log10(d['x1v']),logr,menc_logr)
+        #menc_gas = np.broadcast_to(mencr_gas,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) ) 
+        
+        #mencr_x1fp_gas = np.cumsum( np.sum(d['rho']*d['dvol'],axis=(0,1)) )
+        #mencr_gas = np.interp(d['x1v'],d['x1f'][1:],mencr_x1fp_gas )
+        #menc_gas = np.broadcast_to(mencr_x1fp_gas,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )  # CHANGE
+
+        #rm = d['x1f'][0:-1]
+        #rp = d['x1f'][1:]
+        #coord_area2_i = 0.5*(rp**2 - rm**2)
+        #coord_vol_i = (rp**3 - rm**3)/3.
+        #coord_src1 = np.broadcast_to(coord_area2_i / coord_vol_i,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )
+        
+        #d['epotg'] = -G*menc_gas*d['rho']*coord_src1
+        #d['epot1'] = -G*m1*d['rho']*coord_src1
+        d['epotp2'] = - G*m2*d['rho']*pspline(dist2,rsoft2)
         d['ek'] = 0.5*d['rho']*((d['vx']-vcom[0])**2 +
                            (d['vy']-vcom[1])**2 + 
                            (d['vz']-vcom[2])**2)
         d['ei'] = d['press']/(gamma-1)
-        d['etot'] = d['epotg'] + d['epotp'] + d['ei'] + d['ek']
-        d['h'] = gamma*d['press']/((gamma-1)*d['rho'])
+        d['etot'] = -d['r7'] +d['epotp2']+ d['ei'] + d['ek']
+        #d['h'] = gamma*d['press']/((gamma-1)*d['rho'])
         d['bern'] = (d['etot']+d['press'])/d['rho']
-               
-        del hse_prof,dist2,M1r
+        d['ek_star'] = 0.5*d['rho']*(d['vel1']**2 + d['vel2']**2 + d['vel3']**2)
+
+        d['etot_star'] = -d['r7'] + (d['ei'] + d['ek_star'])/d['rho']
+        d['etot_star_0'] = (d['r4'] + d['r5'] - d['r6'])
+        d['dE'] = d['etot_star'] - d['etot_star_0']
+        
+        #del hse_prof,dist2,M1r
     
     return d
     
