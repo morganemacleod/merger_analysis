@@ -1,11 +1,15 @@
 # normal stuff
-import matplotlib.pyplot as plt
 import matplotlib as mpl
+mpl.use('agg')
+import matplotlib.pyplot as plt
 import numpy as np
 from astropy.io import ascii
 from astropy.table import Table
 #from merger_analysis import athena_read as ar
-from . import athena_read as ar
+try:
+    from . import athena_read as ar
+except:
+    import athena_read as ar
 #import athena_read as ar
 from glob import glob
 from matplotlib.colors import LinearSegmentedColormap
