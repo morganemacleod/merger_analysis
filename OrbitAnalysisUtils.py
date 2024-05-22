@@ -199,7 +199,8 @@ def read_data(fn,orb,
     d = ar.athdf(fn,level=level,subsample=True,
                  x1_min=x1_min,x1_max=x1_max,
                  x2_min=x2_min,x2_max=x2_max,
-                 x3_min=x3_min,x3_max=x3_max) # approximate arrays by subsampling if level < max
+                 x3_min=x3_min,x3_max=x3_max,
+                 return_levels=True) # approximate arrays by subsampling if level < max
     print (" ...file read, constructing arrays")
     print (" ...gamma=",gamma)
     
@@ -239,7 +240,7 @@ def read_data(fn,orb,
     # AREA / VOLUME 
     sin_th = np.sin(d['gx2v'])
     d['dA'] = d['gx1v']**2 * sin_th * gd2*gd3
-    d['dvol'] = d['dA'] * gd1
+    d['dvol'] = np.float64(d['dA']) * np.float64(gd1)
     
     # free up d1,d2,d3
     del d1,d2,d3
