@@ -338,7 +338,8 @@ def read_data(fn,orb,
                            (d['vy']-vcom[1])**2 + 
                            (d['vz']-vcom[2])**2)
         d['ei'] = d['press']/(gamma-1)
-        d['etot'] = -d['r7'] +d['epotp2']+ d['ei'] + d['ek']
+        d['epot'] = -d['r7']*d['rho'] + d['epotp2']
+        d['etot'] = d['epot']+ d['ei'] + d['ek']
         #d['h'] = gamma*d['press']/((gamma-1)*d['rho'])
         d['bern'] = (d['etot']+d['press'])/d['rho']
         d['ek_star'] = 0.5*d['rho']*(d['vel1']**2 + d['vel2']**2 + d['vel3']**2)
