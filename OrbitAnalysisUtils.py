@@ -209,10 +209,11 @@ def read_data(fn,orb,
     # get properties of orbit
     rcom,vcom = rcom_vcom(orb,t)
 
-    if m1==0:
-        m1 = np.interp(t,orb['time'],orb['m1'])
-    if m2==0:
-        m2 = np.interp(t,orb['time'],orb['m2'])
+    if triple==False:
+        if m1==0:
+            m1 = np.interp(t,orb['time'],orb['m1'])
+        if m2==0:
+            m2 = np.interp(t,orb['time'],orb['m2'])
 
     data_shape = (len(d['x3v']),len(d['x2v']),len(d['x1v']))
    
