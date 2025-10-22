@@ -478,7 +478,7 @@ def get_plot_array_vertical(quantity,phislice,
     z1 = d['z'][0,:,:]
     val1 = d[quantity][0,:,:]
     
-    if(x3slicevalue<0):
+    if(x3slicevalue<np.pi):
         x3slicevalue += np.pi
     else:
         x3slicevalue -= np.pi
