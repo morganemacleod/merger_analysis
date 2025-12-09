@@ -309,31 +309,37 @@ def read_data(fn,orb,
         #energy (monopole self grav)
         dist2 = np.sqrt( (d['x']-x2)**2 + (d['y']-y2)**2 + (d['z']-z2)**2 )
 
-        #NGRAV = 100
-        #rmin = 0.3
-        #rmax = 100.0
-        #logr = np.linspace(np.log10(rmin),np.log10(rmax),NGRAV)
+        if 'r7' in d:
+            print('r7 key exists')
+        else:
+            NGRAV = 100
+            rmin = d['x1f'][0]
+            rmax = d['x1f'][-1]
+            logr = np.linspace(np.log10(rmin),np.log10(rmax),NGRAV)
         
-        #menc_logr = np.zeros_like(logr)
-        #for i,lr in enumerate(logr):
-        #    sel = np.log10(d['gx1v'])<lr
-        #    menc_logr[i] = np.sum( (d['rho']*d['dvol'])[sel] )
+            menc_logr = np.zeros_like(logr)
+            for i,lr in enumerate(logr):
+                sel = np.log10(d['gx1v'])<lr
+                menc_logr[i] = np.sum( (d['rho']*d['dvol'])[sel] )
 
-        #mencr_gas = np.interp(np.log10(d['x1v']),logr,menc_logr)
-        #menc_gas = np.broadcast_to(mencr_gas,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) ) 
+            mencr_gas = np.interp(np.log10(d['x1v']),logr,menc_logr)
+            menc_gas = np.broadcast_to(mencr_gas,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) ) 
         
-        #mencr_x1fp_gas = np.cumsum( np.sum(d['rho']*d['dvol'],axis=(0,1)) )
-        #mencr_gas = np.interp(d['x1v'],d['x1f'][1:],mencr_x1fp_gas )
-        #menc_gas = np.broadcast_to(mencr_x1fp_gas,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )  # CHANGE
+            mencr_x1fp_gas = np.cumsum( np.sum(d['rho']*d['dvol'],axis=(0,1)) )
+            mencr_gas = np.interp(d['x1v'],d['x1f'][1:],mencr_x1fp_gas )
+            menc_gas = np.broadcast_to(mencr_x1fp_gas,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )  # CHANGE
 
-        #rm = d['x1f'][0:-1]
-        #rp = d['x1f'][1:]
-        #coord_area2_i = 0.5*(rp**2 - rm**2)
-        #coord_vol_i = (rp**3 - rm**3)/3.
-        #coord_src1 = np.broadcast_to(coord_area2_i / coord_vol_i,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )
+            rm = d['x1f'][0:-1]
+            rp = d['x1f'][1:]
+            coord_area2_i = 0.5*(rp**2 - rm**2)
+            coord_vol_i = (rp**3 - rm**3)/3.
+            coord_src1 = np.broadcast_to(coord_area2_i / coord_vol_i,(len(d['x3v']),len(d['x2v']),len(d['x1v'])) )
         
-        #d['epotg'] = -G*menc_gas*d['rho']*coord_src1
-        #d['epot1'] = -G*m1*d['rho']*coord_src1
+            #d['epotg'] = -G*menc_gas*d['rho']*coord_src1
+            #d['epot1'] = -G*m1*d['rho']*coord_src1
+            d['r7'] = -G*(m1 + menc_gas)*coord_src1
+            print('r7 defined')
+
         d['epotp2'] = - G*m2*d['rho']*pspline(dist2,rsoft2)
         d['ek'] = 0.5*d['rho']*((d['vx']-vcom[0])**2 +
                            (d['vy']-vcom[1])**2 + 
